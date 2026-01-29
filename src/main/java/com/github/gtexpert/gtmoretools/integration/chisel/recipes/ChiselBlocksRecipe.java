@@ -157,7 +157,7 @@ public class ChiselBlocksRecipe {
                     .filter(itemStack -> !itemStack.isEmpty())
                     .forEach(target -> stacks.stream()
                             // Exclude cases where input and target are the same
-                            .filter(stack -> stack != target)
+                            .filter(stack -> !stack.isItemEqual(target))
                             .forEach(stack -> ChiselRecipeMaps.AUTO_CHISEL_RECIPES.recipeBuilder()
                                     .inputs(stack.copy())
                                     .notConsumable(target.copy())
