@@ -12,9 +12,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import gregtech.api.GTValues;
 import gregtech.api.items.toolitem.IGTTool;
 import gregtech.api.items.toolitem.ItemGTTool;
-import gregtech.api.items.toolitem.ToolHelper;
 import gregtech.api.unification.OreDictUnifier;
-import gregtech.api.unification.material.Materials;
 
 import com.github.gtexpert.gtmoretools.api.ModValues;
 
@@ -32,8 +30,10 @@ public final class ChiselToolItems {
 
     public static void init() {
         CHISEL = register(ItemGTTool.Builder.of(ModValues.MODID, "chisel")
-                .toolStats(b -> b.cannotAttack().attackSpeed(-1.0F))
+                .toolStats(b -> b.crafting().damagePerCraftingAction(1)
+                        .cannotAttack().attackSpeed(-1.0F))
                 .oreDict("toolChisel")
+                .secondaryOreDicts("craftChisel")
                 .toolClasses("chisel")
                 .build());
     }

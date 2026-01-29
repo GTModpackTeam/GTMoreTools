@@ -34,7 +34,7 @@ public class ChiselToolRecipeHandler {
         if (ChiselConfigHolder.hardToolRecipes) {
             ModHandler.addShapedRecipe(String.format("chisel_%s", material.getName()),
                     ChiselToolItems.CHISEL.get(material),
-                    "fPh", " S ",
+                    "fP", "Sh",
                     'P', new UnificationEntry(OrePrefix.plate, material),
                     'S', new UnificationEntry(OrePrefix.stick, Materials.Wood));
         } else {
@@ -50,7 +50,7 @@ public class ChiselToolRecipeHandler {
         if (ChiselConfigHolder.hardToolRecipes) {
             ModHandler.addShapedRecipe("chisel_flint",
                     ChiselToolItems.CHISEL.get(Materials.Flint),
-                    "fFh", " S ",
+                    "fF", "Sh",
                     'F', new UnificationEntry(OrePrefix.gem, Materials.Flint),
                     'S', new UnificationEntry(OrePrefix.stick, Materials.Wood));
         } else {

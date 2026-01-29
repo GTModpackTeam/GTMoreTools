@@ -9,6 +9,7 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraftforge.client.event.ColorHandlerEvent;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
@@ -50,6 +51,10 @@ public class ChiselModule extends IntegrationSubmodule {
         ChiselToolItems.init();
     }
 
+    @Override
+    public void postInit(FMLPostInitializationEvent event) {
+        ChiselBlocksRecipe.registerAutoChiselRecipe();
+    }
 
     @SubscribeEvent
     public static void onRegisterItems(RegistryEvent.Register<Item> event) {
