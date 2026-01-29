@@ -114,9 +114,9 @@ public class ChiselBlocksRecipe {
                         if (Mods.ProjectRedIllumination.isModLoaded()) {
                             ChiselUtil.addVariation("lamp" + colorName,
                                     ModUtility.getModItem(Mods.Names.PROJECT_RED_ILLUMINATION, "lamp", 1, i));
-                        }
                         ChiselUtil.addVariation("lamp" + colorName,
                                 ModUtility.getModItem(Mods.Names.PROJECT_RED_ILLUMINATION, "lamp", 1, i + 16));
+                    }
                         ChiselUtil.addVariation("lamp" + colorName, new ItemStack(lamp, 1, lampMeta));
                         lampMeta++;
                     }
