@@ -34,6 +34,7 @@ public final class ChiselToolItems {
         CHISEL = register(ItemGTTool.Builder.of(ModValues.MODID, "chisel")
                 .toolStats(b -> b.cannotAttack().attackSpeed(-1.0F))
                 .oreDict("toolChisel")
+                .secondaryOreDicts("craftChisel")
                 .toolClasses("chisel")
                 .build());
     }
