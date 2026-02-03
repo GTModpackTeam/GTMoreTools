@@ -129,7 +129,7 @@ public abstract class ItemGTToolWandMixin implements IWandItem {
         if (toolDurability <= 0) {
             return 64;
         }
-        return Math.max(1, toolDurability / 16);
+        return Math.max(1, (toolDurability / 16) + 1);
     }
 
     private void gtexpert$setMode(ItemStack item, EnumLock mode) {
