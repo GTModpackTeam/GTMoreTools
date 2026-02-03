@@ -1,5 +1,6 @@
 package com.github.gtexpert.gtmoretools.mixins.bbw;
 
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -11,8 +12,6 @@ import gregtech.api.items.toolitem.IGTTool;
 import gregtech.api.items.toolitem.ItemGTTool;
 import gregtech.api.items.toolitem.ToolHelper;
 import gregtech.api.unification.material.Materials;
-
-import net.minecraft.entity.EntityLivingBase;
 
 import portablejim.bbw.basics.EnumFluidLock;
 import portablejim.bbw.basics.EnumLock;
