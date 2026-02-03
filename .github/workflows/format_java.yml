@@ -1,0 +1,75 @@
+# Runs formatting requirements
+name: Java Formatting
+
+on:
+  pull_request:
+    paths: ['src/main/java/**', 'src/test/**']
+
+concurrency:
+  group: format-${{ github.head_ref || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  formatting:
+    name: Formatting
+    runs-on: ubuntu-latest
+
+    permissions:
+      pull-requests: write
+      contents: write
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ github.head_ref }}
+
+      - name: Setup Build
+        uses: ./.github/actions/build_setup
+
+      - name: Check if PR is from a fork
+        id: fork-check
+        run: |
+          if [ "${{ github.event.pull_request.head.repo.full_name }}" != "${{ github.repository }}" ]; then
+            echo "is_fork=true" >> $GITHUB_OUTPUT
+          else
+            echo "is_fork=false" >> $GITHUB_OUTPUT
+          fi
+        shell: bash
+
+      - name: Run Spotless Formatting Check with Gradle
+        id: build
+        run: ./gradlew --info --stacktrace spotlessCheck
+
+      - name: Attempt to make a PR fixing spotless errors
+        if: failure() && steps.build.conclusion == 'failure' && steps.fork-check.outputs.is_fork == 'false'
+        run: |
+          git reset --hard
+          git checkout "${PR_BRANCH}"
+          ./gradlew --info spotlessApply || exit 1
+          git diff --exit-code && exit 1
+          git config user.name "GitHub Actions"
+          git config user.email "<>"
+          git switch -c "${FIXED_BRANCH}"
+          git commit -am "spotlessApply"
+          git push --force-with-lease origin "${FIXED_BRANCH}"
+          gh pr create \
+            --head "${FIXED_BRANCH}" \
+            --base "${PR_BRANCH}" \
+            --title "Spotless apply for branch ${PR_BRANCH} for #${PR_NUMBER}" \
+            --body "Automatic spotless apply to fix formatting errors, applies to PR #${PR_NUMBER}" \
+            2>&1 | tee pr-message.log || true
+          gh pr comment "${PR_BRANCH}" -F pr-message.log || true
+        shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_BRANCH: ${{ github.event.pull_request.head.ref }}
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          FIXED_BRANCH: ${{ github.head_ref }}-spotless-fixes
+
+      - name: Comment to PR if from fork and formatting failed
+        if: failure() && steps.build.conclusion == 'failure' && steps.fork-check.outputs.is_fork == 'true'
+        run: |
+          gh pr comment ${{ github.event.pull_request.number }} --body "I can't get automatic fixes by spotless in CI. Please run '. /gradlew spotlessApply' and push again."
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
