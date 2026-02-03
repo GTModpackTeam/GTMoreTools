@@ -12,6 +12,8 @@ import gregtech.api.unification.stack.UnificationEntry;
 
 import com.github.gtexpert.gtmoretools.integration.chisel.ChiselConfigHolder;
 
+import gregtech.common.ConfigHolder;
+
 public class ChiselToolRecipeHandler {
 
     public static void registerRecipes() {
@@ -31,7 +33,7 @@ public class ChiselToolRecipeHandler {
     }
 
     private static void processChiselRecipe(Material material) {
-        if (ChiselConfigHolder.hardToolRecipes) {
+        if (ConfigHolder.recipes.hardToolArmorRecipes) {
             ModHandler.addShapedRecipe(String.format("chisel_%s", material.getName()),
                     ChiselToolItems.CHISEL.get(material),
                     "fP", "Sh",
@@ -47,7 +49,7 @@ public class ChiselToolRecipeHandler {
     }
 
     private static void processFlintChiselRecipe() {
-        if (ChiselConfigHolder.hardToolRecipes) {
+        if (ConfigHolder.recipes.hardToolArmorRecipes) {
             ModHandler.addShapedRecipe("chisel_flint",
                     ChiselToolItems.CHISEL.get(Materials.Flint),
                     "fF", "Sh",

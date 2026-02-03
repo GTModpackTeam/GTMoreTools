@@ -48,10 +48,53 @@ dependencies {
     // Hard Dependencies
     devOnlyNonPublishable(rfg.deobf("curse.maven:gregtech-ce-unofficial-557242:5519022")) // CEu 2.8.10
 
+    // Debug ImplosionNoBomb: 1.1.0
+    compileOnly rfg.deobf("curse.maven:implosionnobomb-1094386:5731331")
+    if (project.debug_all.toBoolean() || project.debug_inb.toBoolean()) {
+        runtimeOnly "curse.maven:implosionnobomb-1094386:5731331"
+    }
+
+    // Debug AE2UEL 0.56.7
+    compileOnly rfg.deobf("curse.maven:ae2-extended-life-570458:6302098")
+    if (project.debug_all.toBoolean() || project.debug_chisel.toBoolean()) {
+        runtimeOnly rfg.deobf("curse.maven:ae2-extended-life-570458:6302098")
+    }
+
+    // Debug Thaumcraft
+    if (project.debug_all.toBoolean() || project.debug_thaumcraft.toBoolean()) {
+        runtimeOnly "curse.maven:baubles-227083:2518667" // Baubles 1.5.2
+        runtimeOnly "curse.maven:thaumcraft-223628:2629023" // Thaumcraft 6.1.BETA26
+    }
+
+    // Debug EnderIO
+    compileOnly "info.loenwind.autoconfig:AutoConfig:1.12.2-1.0.2" // AutoConfig 1.0.2
+    compileOnly "info.loenwind.autosave:AutoSave:1.12.2-1.0.11" // AutoSave 1.0.11
+    compileOnly rfg.deobf("curse.maven:endercore-231868:4671384") // EnderCore 0.5.78
+    compileOnly rfg.deobf("curse.maven:ender-io-base-297193:4674231") // EIO 5.3.72
+    compileOnly rfg.deobf("curse.maven:ender-io-endergy-304346:4674241") // EIOE 5.3.72
+    compileOnly rfg.deobf("curse.maven:ender-io-machines-297196:4674232") // EIOM 5.3.72
+    compileOnly rfg.deobf("curse.maven:ender-io-conduits-297197:4674233") // EIOC 5.3.72
+    compileOnly rfg.deobf("curse.maven:ender-io-ae2-conduits-297199:4674234") // EIOCA 5.3.72
+    if (project.debug_all.toBoolean() || project.debug_eio.toBoolean()) {
+        runtimeOnly "info.loenwind.autoconfig:AutoConfig:1.12.2-1.0.2" // AutoConfig 1.0.2
+        runtimeOnly "info.loenwind.autosave:AutoSave:1.12.2-1.0.11" // AutoSave 1.0.11
+        runtimeOnly rfg.deobf("curse.maven:endercore-231868:4671384") // EnderCore 0.5.78
+        runtimeOnly rfg.deobf("curse.maven:ender-io-base-297193:4674231") // EIO 5.3.72
+        runtimeOnly rfg.deobf("curse.maven:ender-io-endergy-304346:4674241") // EIOE 5.3.72
+        runtimeOnly rfg.deobf("curse.maven:ender-io-machines-297196:4674232") // EIOM 5.3.72
+        runtimeOnly rfg.deobf("curse.maven:ender-io-conduits-297197:4674233") // EIOC 5.3.72
+        runtimeOnly rfg.deobf("curse.maven:ender-io-ae2-conduits-297199:4674234") // EIOCA 5.3.72
+    }
+
     // Debug Chisel: 1.0.2.45
     compileOnly rfg.deobf("curse.maven:chisel-235279:2915375")
     if (project.debug_all.toBoolean() || project.debug_chisel.toBoolean()) {
         runtimeOnly rfg.deobf("curse.maven:chisel-235279:2915375")
         runtimeOnly rfg.deobf("curse.maven:ctm-267602:2915363") // CTM 1.0.2.31
+    }
+
+    // Boot error fix
+    if (project.debug_all.toBoolean() || project.debug_eio.toBoolean()) {
+        runtimeOnly files("libs/EnderCore-1.12.2-0.5.78-core.jar")
     }
 }

@@ -36,7 +36,7 @@ import com.github.gtexpert.gtmoretools.modules.Modules;
          moduleID = Modules.MODULE_CHISEL,
          containerID = ModValues.MODID,
          modDependencies = Mods.Names.CHISEL,
-         name = "GTExpert Chisel Integration",
+         name = "GTMoreTools Chisel Integration",
          description = "Chisel Integration Module")
 public class ChiselModule extends IntegrationSubmodule {
 
