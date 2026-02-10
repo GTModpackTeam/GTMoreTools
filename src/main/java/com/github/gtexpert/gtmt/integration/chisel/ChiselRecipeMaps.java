@@ -8,15 +8,8 @@ import gregtech.core.sound.GTSoundEvents;
 
 import com.github.gtexpert.gtmt.api.gui.ModGuiTextures;
 
-import crafttweaker.annotations.ZenRegister;
-import stanhebben.zenscript.annotations.ZenExpansion;
-import stanhebben.zenscript.annotations.ZenProperty;
-
-@ZenExpansion("mods.gregtech.recipe.RecipeMaps")
-@ZenRegister
 public class ChiselRecipeMaps {
 
-    @ZenProperty
     public static final RecipeMap<SimpleRecipeBuilder> AUTO_CHISEL_RECIPES = new RecipeMap<>(
             "auto_chisel", 2, 9, 0, 0, new SimpleRecipeBuilder(), true)
                     .setSlotOverlay(false, false, false, GuiTextures.BOXED_BACKGROUND)

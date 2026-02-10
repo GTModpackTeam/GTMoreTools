@@ -5,15 +5,17 @@ import static gregtech.api.GTValues.*;
 import static gregtech.api.unification.ore.OrePrefix.*;
 import static gregtech.loaders.recipe.CraftingComponent.*;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.IntStream;
 
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.oredict.OreDictionary;
 
 import com.google.common.base.CaseFormat;
 
@@ -133,37 +135,56 @@ public class ChiselBlocksRecipe {
                 i++;
             }
         }
+    }
 
-        // ######################
-        // Default chiseling
-        // ######################
-        // Material Blocks
-        List<ItemStack> aluminums = OreDictionary.getOres("blockAluminum");
-        aluminums.forEach(alumimun -> OreDictionary.registerOre("blockAluminium", alumimun));
+    public static void registerAluminiumOreMapping() {
+        ICarvingGroup group = Carving.chisel.getGroup("blockAluminum");
+        if (group != null) {
+            Carving.chisel.setOreName(group, "blockAluminium");
+        }
     }
 
     public static void registerAutoChiselRecipe() {
-        Carving.chisel.getSortedGroupNames().forEach(groupName -> {
+        // GregTech IMC creates OreDict-based groups (e.g. "blockCoalCoke") that overlap
+        // with Chisel's built-in groups (e.g. "block_coal_coke"), so track globally to
+        // avoid registering duplicate recipes across groups.
+        Set<String> registeredRecipes = new HashSet<>();
+
+        for (String groupName : Carving.chisel.getSortedGroupNames()) {
             ICarvingGroup group = Carving.chisel.getGroup(groupName);
+            if (group == null) continue;
 
-            // Safety check: skip if the group does not exist
-            if (group == null) {
-                return;
+            List<ItemStack> stacks = getUniqueStacks(Carving.chisel.getItemsForChiseling(group));
+
+            for (ItemStack target : stacks) {
+                for (ItemStack input : stacks) {
+                    if (input.isItemEqual(target)) continue;
+
+                    String key = itemKey(input) + ">" + itemKey(target);
+                    if (!registeredRecipes.add(key)) continue;
+
+                    ChiselRecipeMaps.AUTO_CHISEL_RECIPES.recipeBuilder()
+                            .inputs(input.copy())
+                            .notConsumable(target.copy())
+                            .outputs(target.copy())
+                            .duration(10).EUt(VH[ULV])
+                            .buildAndRegister();
+                }
             }
+        }
+    }
 
-            List<ItemStack> stacks = Carving.chisel.getItemsForChiseling(group);
-            stacks.stream()
-                    // Exclude ItemStack.EMPTY
-                    .filter(itemStack -> !itemStack.isEmpty())
-                    .forEach(target -> stacks.stream()
-                            // Exclude cases where input and target are the same
-                            .filter(stack -> !stack.isItemEqual(target))
-                            .forEach(stack -> ChiselRecipeMaps.AUTO_CHISEL_RECIPES.recipeBuilder()
-                                    .inputs(stack.copy())
-                                    .notConsumable(target.copy())
-                                    .outputs(target.copy())
-                                    .duration(10).EUt(VH[ULV])
-                                    .buildAndRegister()));
-        });
+    private static List<ItemStack> getUniqueStacks(List<ItemStack> stacks) {
+        List<ItemStack> unique = new ArrayList<>();
+        for (ItemStack stack : stacks) {
+            if (!stack.isEmpty() && unique.stream().noneMatch(s -> s.isItemEqual(stack))) {
+                unique.add(stack);
+            }
+        }
+        return unique;
+    }
+
+    private static String itemKey(ItemStack stack) {
+        return stack.getItem().getRegistryName() + "@" + stack.getMetadata();
     }
 }

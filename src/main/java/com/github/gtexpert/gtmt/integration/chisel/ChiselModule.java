@@ -53,6 +53,7 @@ public class ChiselModule extends IntegrationSubmodule {
 
     @Override
     public void postInit(FMLPostInitializationEvent event) {
+        ChiselBlocksRecipe.registerAluminiumOreMapping();
         ChiselBlocksRecipe.registerAutoChiselRecipe();
     }
 
