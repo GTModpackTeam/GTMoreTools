@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
 
     # Avoid running this workflow on forks
-    if: github.repository == 'GTModpackTeam/GTExpert-Core'
+    if: github.repository == 'GTModpackTeam/GTMoreTools'
 
     permissions:
       contents: write
