@@ -74,7 +74,21 @@ public abstract class ItemGTToolWandMixin implements IWandItem {
 
     @Override
     public IWand getWand() {
-        // Return a GT-aware IWand for BBW's preview rendering and other IWand consumers
+        if (!gtexpert$isWandTool()) {
+            // Non-wand GT tools: return IWand with 0 maxBlocks to suppress preview
+            return new IWand() {
+
+                @Override
+                public int getMaxBlocks(ItemStack itemStack) {
+                    return 0;
+                }
+
+                @Override
+                public boolean placeBlock(ItemStack itemStack, EntityLivingBase entity) {
+                    return false;
+                }
+            };
+        }
         return new IWand() {
 
             @Override
