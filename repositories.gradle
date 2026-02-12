@@ -5,4 +5,7 @@ repositories {
         name 'Mod Maven'
         url 'https://modmaven.dev'
     }
+    flatDir {
+        dirs 'libs'
+    }
 }
