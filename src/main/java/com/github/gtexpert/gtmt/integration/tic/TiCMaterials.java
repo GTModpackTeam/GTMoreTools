@@ -121,10 +121,11 @@ public final class TiCMaterials {
             integration = new MaterialIntegration(ticMaterial);
         }
 
-        // Drive lifecycle: TiC's preInit loop already ran
+        // TiC's preInit loop already ran by this point, so we drive the lifecycle manually.
+        // preInit() has an internal guard against double execution.
+        TinkerRegistry.integrate(integration);
         integration.preInit();
         integration.registerFluidBlock(blockRegistry);
-        TinkerRegistry.integrate(integration);
         integrations.add(integration);
     }
 

@@ -3,7 +3,6 @@
 - CEu tool materials are now registered as TiC materials with Head, Handle, Extra, and Bow stats.
 - Material names are inherited from CEu's localization.
 - Molten fluid and smeltery casting/melting support for CEu materials.
-- Known issue: Tool Forge leg coloring for GT blocks is not yet supported (TODO).
 
 * * *
 
