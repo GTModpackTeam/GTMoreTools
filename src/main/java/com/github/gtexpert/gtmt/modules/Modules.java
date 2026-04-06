@@ -22,6 +22,7 @@ public class Modules implements IModuleContainer {
     public static final String MODULE_AEA = "aeadditions_integration";
     public static final String MODULE_NAE2 = "nae2_integration";
     public static final String MODULE_BBW = "bbw_integration";
+    public static final String MODULE_TIC = "tic_integration";
     public static final String MODULE_BINNIES = "binnies_integration";
     public static final String MODULE_BOTANY = "botany_integration";
     public static final String MODULE_EXBEES = "extrabees_integration";

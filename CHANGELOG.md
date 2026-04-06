@@ -1,3 +1,11 @@
+# v1.2.0
+## New: Tinkers' Construct Integration
+- CEu tool materials are now registered as TiC materials with Head, Handle, Extra, and Bow stats.
+- Material names are inherited from CEu's localization.
+- Molten fluid and smeltery casting/melting support for CEu materials.
+
+* * *
+
 # v1.1.2
 - Fix BBW block preview showing on all GT tools.
 
