@@ -91,6 +91,7 @@ jobs:
             gregtech-ce-unofficial(required)
             chisel(recommended)
             better-builders-wands(recommended)
+            tinkers-antique(recommended)
           files: |
             build/libs/!(*-@(dev|sources|javadoc)).jar
             build/libs/*-@(sources).jar
