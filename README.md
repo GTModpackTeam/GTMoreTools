@@ -20,6 +20,12 @@ This mod is an add-on for GregTech CEu that provides integration with various mo
 ### Better Builder's Wands Integration
 - Adds GT material-based Wand tools
 
+### Tinkers' Construct Integration
+- CEu tool materials are automatically registered as Tinkers' Construct materials
+- Supports Head, Handle, Extra, and Bow stats derived from GT material properties
+- Material names are inherited from CEu's localization
+- Molten fluid and smeltery casting/melting support for CEu materials with fluid properties
+
 
 ## Credits
 
