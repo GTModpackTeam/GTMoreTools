@@ -60,4 +60,12 @@ dependencies {
     if (project.debug_all.toBoolean() || project.debug_bbw.toBoolean()) {
         runtimeOnly rfg.deobf("curse.maven:better-builders-wands-238403:2691084")
     }
+
+    // Debug TiC
+    compileOnly rfg.deobf("curse.maven:mantle-74924:2713386")
+    compileOnly rfg.deobf("curse.maven:tinkers-antique-1242239:7339332")
+    if (project.debug_all.toBoolean() || project.debug_tic.toBoolean()) {
+        runtimeOnly rfg.deobf("curse.maven:mantle-74924:2713386")
+        runtimeOnly rfg.deobf("curse.maven:tinkers-antique-1242239:7339332")
+    }
 }
