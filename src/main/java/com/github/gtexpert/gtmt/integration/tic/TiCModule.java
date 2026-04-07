@@ -16,6 +16,8 @@ import com.github.gtexpert.gtmt.api.ModValues;
 import com.github.gtexpert.gtmt.api.modules.TModule;
 import com.github.gtexpert.gtmt.api.util.Mods;
 import com.github.gtexpert.gtmt.integration.IntegrationSubmodule;
+import com.github.gtexpert.gtmt.integration.tic.materials.ElasticMaterialRegistrar;
+import com.github.gtexpert.gtmt.integration.tic.materials.ToolMaterialRegistrar;
 import com.github.gtexpert.gtmt.modules.Modules;
 
 @TModule(
@@ -34,13 +36,14 @@ public class TiCModule extends IntegrationSubmodule {
 
     @Override
     public void registerBlocks(RegistryEvent.Register<Block> event) {
-        TiCMaterials.register(event.getRegistry());
+        ToolMaterialRegistrar.register(event.getRegistry());
+        ElasticMaterialRegistrar.register(event.getRegistry());
         TiCSmeltery.register();
     }
 
     @SubscribeEvent
     @SideOnly(Side.CLIENT)
     public static void onRegisterModels(ModelRegistryEvent event) {
-        TiCMaterials.registerFluidModels();
+        ToolMaterialRegistrar.registerFluidModels();
     }
 }

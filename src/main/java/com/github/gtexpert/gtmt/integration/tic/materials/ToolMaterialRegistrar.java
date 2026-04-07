@@ -1,4 +1,4 @@
-package com.github.gtexpert.gtmt.integration.tic;
+package com.github.gtexpert.gtmt.integration.tic.materials;
 
 import java.io.ByteArrayInputStream;
 import java.nio.charset.StandardCharsets;
@@ -16,23 +16,28 @@ import gregtech.api.GregTechAPI;
 import gregtech.api.unification.material.Material;
 import gregtech.api.unification.material.properties.PropertyKey;
 import gregtech.api.unification.material.properties.ToolProperty;
-import gregtech.api.unification.stack.MaterialStack;
 
 import com.github.gtexpert.gtmt.api.ModValues;
 import com.github.gtexpert.gtmt.integration.tic.api.HarvestLevels;
-import com.github.gtexpert.gtmt.integration.tic.api.TraitRegistry;
 
 import slimeknights.tconstruct.library.MaterialIntegration;
 import slimeknights.tconstruct.library.TinkerRegistry;
-import slimeknights.tconstruct.library.materials.ArrowShaftMaterialStats;
-import slimeknights.tconstruct.library.materials.BowMaterialStats;
 import slimeknights.tconstruct.library.materials.ExtraMaterialStats;
 import slimeknights.tconstruct.library.materials.HandleMaterialStats;
 import slimeknights.tconstruct.library.materials.HeadMaterialStats;
 
-public final class TiCMaterials {
-
-    private static final List<MaterialIntegration> integrations = new ArrayList<>();
+/**
+ * Registers GT tool materials as TiC materials and manages the fluid-block integration list.
+ *
+ * <p>
+ * For each GT material that carries both {@code TOOL} and {@code INGOT}/{@code GEM}:
+ * <ul>
+ * <li>If TiC already knows a material with the same name → <b>merge</b>: take the max of
+ * each stat and add GT traits to the existing material.</li>
+ * <li>Otherwise → <b>register</b>: create a new TiC material from scratch.</li>
+ * </ul>
+ */
+public final class ToolMaterialRegistrar {
 
     /** TiC harvest level colors for levels beyond Cobalt (4). */
     private static final TextFormatting[] EXTRA_LEVEL_COLORS = {
@@ -41,24 +46,19 @@ public final class TiCMaterials {
             TextFormatting.WHITE,        // level 7+
     };
 
-    private TiCMaterials() {}
+    private static final List<MaterialIntegration> integrations = new ArrayList<>();
+
+    private ToolMaterialRegistrar() {}
 
     /**
-     * Called during registerBlocks when GT materials are available.
+     * Entry point called during {@code registerBlocks} when GT materials are available.
      * Also registers fluid blocks into the block registry.
-     *
-     * <p>
-     * For each GT tool material:
-     * <ul>
-     * <li>If TiC already has a material with the same name → <b>merge</b>: take max stats
-     * and add GT enchantments/traits to the existing material.</li>
-     * <li>Otherwise → <b>register</b>: create a new TiC material.</li>
-     * </ul>
      */
     public static void register(IForgeRegistry<Block> blockRegistry) {
         for (Material gtMaterial : GregTechAPI.materialManager.getRegisteredMaterials()) {
             if (!gtMaterial.hasProperty(PropertyKey.TOOL)) continue;
             if (!gtMaterial.hasProperty(PropertyKey.INGOT) && !gtMaterial.hasProperty(PropertyKey.GEM)) continue;
+
             slimeknights.tconstruct.library.materials.Material existing = TinkerRegistry
                     .getMaterial(gtMaterial.getName());
 
@@ -74,7 +74,8 @@ public final class TiCMaterials {
     }
 
     /**
-     * Called during ModelRegistryEvent to register fluid block models.
+     * Called during {@code ModelRegistryEvent} to register fluid block models.
+     * Must be called after {@link #register}.
      */
     public static void registerFluidModels() {
         for (MaterialIntegration integration : integrations) {
@@ -83,13 +84,13 @@ public final class TiCMaterials {
     }
 
     // -------------------------------------------------------------------------
-    // Merge path — GT material matches an existing TiC native material
+    // Merge path
     // -------------------------------------------------------------------------
 
     /**
      * Enhance an already-registered TiC material with GT stats and traits.
-     * For each stat type, the <b>maximum</b> of the TiC and GT values is kept.
-     * Bow drawspeed uses the <b>minimum</b> (faster draw = better).
+     * For each stat type the <b>maximum</b> value is kept; bow draw-speed uses the
+     * <b>minimum</b> (lower = faster draw).
      */
     private static void mergeMaterial(slimeknights.tconstruct.library.materials.Material ticMaterial,
                                       Material gtMaterial) {
@@ -97,7 +98,7 @@ public final class TiCMaterials {
 
         // Head stats
         HeadMaterialStats existingHead = (HeadMaterialStats) ticMaterial.getStats("head");
-        int ticHL = mapHarvestLevel(toolProp.getToolHarvestLevel());
+        int ticHL = MaterialStatCalc.mapHarvestLevel(toolProp.getToolHarvestLevel());
         if (existingHead != null) {
             TinkerRegistry.addMaterialStats(ticMaterial, new HeadMaterialStats(
                     Math.max(existingHead.durability, toolProp.getToolDurability()),
@@ -112,8 +113,8 @@ public final class TiCMaterials {
 
         // Handle stats
         HandleMaterialStats existingHandle = (HandleMaterialStats) ticMaterial.getStats("handle");
-        float gtHandleMod = calcHandleModifier(toolProp);
-        int gtHandleDur = calcHandleDurability(toolProp);
+        float gtHandleMod = MaterialStatCalc.calcHandleModifier(toolProp);
+        int gtHandleDur = MaterialStatCalc.calcHandleDurability(toolProp);
         if (existingHandle != null) {
             TinkerRegistry.addMaterialStats(ticMaterial, new HandleMaterialStats(
                     Math.max(existingHandle.modifier, gtHandleMod),
@@ -125,7 +126,7 @@ public final class TiCMaterials {
 
         // Extra stats
         ExtraMaterialStats existingExtra = (ExtraMaterialStats) ticMaterial.getStats("extra");
-        int gtExtra = calcExtraDurability(toolProp.getToolDurability());
+        int gtExtra = MaterialStatCalc.calcExtraDurability(toolProp.getToolDurability());
         if (existingExtra != null) {
             TinkerRegistry.addMaterialStats(ticMaterial,
                     new ExtraMaterialStats(Math.max(existingExtra.extraDurability, gtExtra)));
@@ -134,75 +135,74 @@ public final class TiCMaterials {
         }
 
         // Bow stats — lower drawspeed is faster (better)
-        BowMaterialStats existingBow = (BowMaterialStats) ticMaterial.getStats("bow");
-        BowMaterialStats gtBow = calcBowStats(toolProp);
+        var existingBow = (slimeknights.tconstruct.library.materials.BowMaterialStats) ticMaterial.getStats("bow");
+        var gtBow = MaterialStatCalc.calcBowStats(toolProp);
         if (existingBow != null) {
-            TinkerRegistry.addMaterialStats(ticMaterial, new BowMaterialStats(
-                    Math.min(existingBow.drawspeed, gtBow.drawspeed),
-                    Math.max(existingBow.range, gtBow.range),
-                    Math.max(existingBow.bonusDamage, gtBow.bonusDamage)));
+            TinkerRegistry.addMaterialStats(ticMaterial,
+                    new slimeknights.tconstruct.library.materials.BowMaterialStats(
+                            Math.min(existingBow.drawspeed, gtBow.drawspeed),
+                            Math.max(existingBow.range, gtBow.range),
+                            Math.max(existingBow.bonusDamage, gtBow.bonusDamage)));
         } else {
             TinkerRegistry.addMaterialStats(ticMaterial, gtBow);
         }
 
-        // Arrow shaft stats — GT bolt as shaft material
-        ArrowShaftMaterialStats existingShaft = (ArrowShaftMaterialStats) ticMaterial.getStats("shaft");
-        ArrowShaftMaterialStats gtShaft = calcShaftStats(toolProp);
+        // Arrow shaft stats
+        var existingShaft = (slimeknights.tconstruct.library.materials.ArrowShaftMaterialStats) ticMaterial
+                .getStats("shaft");
+        var gtShaft = MaterialStatCalc.calcShaftStats(toolProp);
         if (existingShaft != null) {
-            TinkerRegistry.addMaterialStats(ticMaterial, new ArrowShaftMaterialStats(
-                    Math.max(existingShaft.modifier, gtShaft.modifier),
-                    Math.max(existingShaft.bonusAmmo, gtShaft.bonusAmmo)));
+            TinkerRegistry.addMaterialStats(ticMaterial,
+                    new slimeknights.tconstruct.library.materials.ArrowShaftMaterialStats(
+                            Math.max(existingShaft.modifier, gtShaft.modifier),
+                            Math.max(existingShaft.bonusAmmo, gtShaft.bonusAmmo)));
         } else {
             TinkerRegistry.addMaterialStats(ticMaterial, gtShaft);
         }
 
-        // Harvest level name tracking
         if (ticHL > 4) {
             HarvestLevels.registerIfAbsent(ticHL, gtMaterial.getLocalizedName());
         }
 
-        // Apply GT traits/enchantments on top of the existing TiC traits
-        applyTraits(ticMaterial, gtMaterial, toolProp);
+        MaterialTraitApplier.applyTraits(ticMaterial, gtMaterial, toolProp);
     }
 
     // -------------------------------------------------------------------------
-    // Register path — new material not already in TiC
+    // Register path
     // -------------------------------------------------------------------------
 
     private static void registerMaterial(Material gtMaterial, IForgeRegistry<Block> blockRegistry) {
         String identifier = ModValues.MODID + "." + gtMaterial.getName();
-        int color = gtMaterial.getMaterialRGB();
         ToolProperty toolProp = gtMaterial.getProperty(PropertyKey.TOOL);
 
         slimeknights.tconstruct.library.materials.Material ticMaterial = new slimeknights.tconstruct.library.materials.Material(
-                identifier, color, true);
+                identifier, gtMaterial.getMaterialRGB(), true);
 
         injectTranslation(identifier, gtMaterial);
 
         int durability = toolProp.getToolDurability();
-        float speed = toolProp.getToolSpeed();
-        float attack = toolProp.getToolAttackDamage();
-        int ticHarvestLevel = mapHarvestLevel(toolProp.getToolHarvestLevel());
+        int ticHarvestLevel = MaterialStatCalc.mapHarvestLevel(toolProp.getToolHarvestLevel());
 
         if (ticHarvestLevel > 4) {
             HarvestLevels.registerIfAbsent(ticHarvestLevel, gtMaterial.getLocalizedName());
         }
 
         TinkerRegistry.addMaterialStats(ticMaterial,
-                new HeadMaterialStats(durability, speed, attack, ticHarvestLevel),
-                new HandleMaterialStats(calcHandleModifier(toolProp), calcHandleDurability(toolProp)),
-                new ExtraMaterialStats(calcExtraDurability(durability)),
-                calcBowStats(toolProp),
-                calcShaftStats(toolProp));
+                new HeadMaterialStats(durability, toolProp.getToolSpeed(),
+                        toolProp.getToolAttackDamage(), ticHarvestLevel),
+                new HandleMaterialStats(MaterialStatCalc.calcHandleModifier(toolProp),
+                        MaterialStatCalc.calcHandleDurability(toolProp)),
+                new ExtraMaterialStats(MaterialStatCalc.calcExtraDurability(durability)),
+                MaterialStatCalc.calcBowStats(toolProp),
+                MaterialStatCalc.calcShaftStats(toolProp));
 
-        applyTraits(ticMaterial, gtMaterial, toolProp);
+        MaterialTraitApplier.applyTraits(ticMaterial, gtMaterial, toolProp);
 
         String oreSuffix = gtMaterial.toCamelCaseString();
         Fluid fluid = getFluid(gtMaterial);
 
         if (gtMaterial.hasProperty(PropertyKey.INGOT) && oreSuffix != null) {
             ticMaterial.addCommonItems(oreSuffix);
-            // GT bolt = 1/4 ingot → matches TiC arrow shaft part cost
             ticMaterial.addItem("bolt" + oreSuffix, 1,
                     slimeknights.tconstruct.library.materials.Material.VALUE_Ingot / 4);
         } else if (gtMaterial.hasProperty(PropertyKey.GEM) && oreSuffix != null) {
@@ -232,129 +232,40 @@ public final class TiCMaterials {
     }
 
     // -------------------------------------------------------------------------
-    // Shared trait / property logic
+    // Helpers
     // -------------------------------------------------------------------------
 
-    /**
-     * Assigns TiC traits from the two {@link TraitRegistry} registries, then handles
-     * per-enchantment traits from the GT tool property.
-     *
-     * <p>
-     * All default rules (Holy, HeatResistant, Cryogenic, AntiCorrosion, HeavyBlow,
-     * Piercer, Magnetic, Unbreakable, Moonlit) are registered in {@link TraitRegistry}'s
-     * static initialiser and are extensible via
-     * {@link TraitRegistry#registerCompositionTrait} and
-     * {@link TraitRegistry#registerPropertyTrait}.
-     */
-    private static void applyTraits(slimeknights.tconstruct.library.materials.Material ticMaterial,
-                                    Material gtMaterial, ToolProperty toolProp) {
-        // Composition-based traits (e.g. contains Silver → Holy, contains Gold → Moonlit)
-        TraitRegistry.getCompositionTraits().forEach((component, entries) -> {
-            if (containsMaterial(gtMaterial, component)) {
-                for (TraitRegistry.TraitEntry entry : entries) {
-                    if (entry.slot() != null) ticMaterial.addTrait(entry.trait(), entry.slot());
-                    else ticMaterial.addTrait(entry.trait());
-                }
-            }
-        });
-
-        // Property-based traits (e.g. blast temp ≥ 2500 → HeatResistant)
-        for (TraitRegistry.PropertyEntry entry : TraitRegistry.getPropertyTraits()) {
-            if (entry.condition().test(gtMaterial, toolProp)) {
-                if (entry.slot() != null) ticMaterial.addTrait(entry.trait(), entry.slot());
-                else ticMaterial.addTrait(entry.trait());
-            }
-        }
-
-        // Enchantment traits — dynamic per-enchantment, not suitable for the static registry
-        toolProp.getEnchantments().forEach((enchantment, enchLevel) -> {
-            int level = enchLevel.getLevel(toolProp.getToolHarvestLevel());
-            if (level > 0) {
-                ticMaterial.addTrait(TraitRegistry.getOrCreateEnchantmentTrait(enchantment, level), "head");
-            }
-        });
-    }
-
-    /** Apply all registered harvest-level names (GTMT auto-assigned + external) to TiC. */
     private static void registerHarvestLevelNames() {
+        // Override TiC's native names (0–4) with vanilla/GT naming convention
+        // so that the same harvest level shows the same name in both GT and TiC tooltips.
+        java.util.Map<Integer, String> ticNames =
+                slimeknights.tconstruct.library.utils.HarvestLevels.harvestLevelNames;
+        ticNames.put(0, TextFormatting.DARK_GREEN + "Wood");
+        ticNames.put(1, TextFormatting.GRAY + "Stone");
+        ticNames.put(2, TextFormatting.WHITE + "Iron");
+        ticNames.put(3, TextFormatting.AQUA + "Diamond");
+        // Level 4 (Cobalt) — no vanilla equivalent, keep TiC's name
+
+        // Register GT-specific levels above Cobalt (4)
         HarvestLevels.getNames().forEach((level, name) -> {
             int colorIndex = Math.min(level - 5, EXTRA_LEVEL_COLORS.length - 1);
-            slimeknights.tconstruct.library.utils.HarvestLevels.harvestLevelNames.put(level,
-                    EXTRA_LEVEL_COLORS[colorIndex] + name);
+            ticNames.put(level, EXTRA_LEVEL_COLORS[colorIndex] + name);
         });
     }
 
-    /** Check whether a material's direct composition contains the given target material. */
-    private static boolean containsMaterial(Material material, Material target) {
-        for (MaterialStack stack : material.getMaterialComponents()) {
-            if (stack.material == target) return true;
-        }
-        return false;
-    }
-
-    private static void injectTranslation(String ticIdentifier, Material gtMaterial) {
+    static void injectTranslation(String ticIdentifier, Material gtMaterial) {
         String key = "material." + ticIdentifier + ".name";
         String entry = key + "=" + gtMaterial.getLocalizedName() + "\n";
         LanguageMap.inject(new ByteArrayInputStream(entry.getBytes(StandardCharsets.UTF_8)));
     }
 
-    /**
-     * Maps GT harvest level to TiC harvest level.
-     * GT 5 → TiC 4 (Cobalt), GT 6 → TiC 5 (new), GT 7 → TiC 6 (new), …
-     */
-    private static int mapHarvestLevel(int gtLevel) {
-        return switch (gtLevel) {
-            case 0, 1 -> 0;
-            case 2 -> 1;
-            case 3 -> 2;
-            case 4 -> 3;
-            default -> gtLevel - 1;
-        };
-    }
-
-    private static float calcHandleModifier(ToolProperty toolProp) {
-        float modifier = 0.5f + (toolProp.getToolDurability() / 2000.0f);
-        return Math.max(0.1f, Math.min(modifier, 2.0f));
-    }
-
-    private static int calcHandleDurability(ToolProperty toolProp) {
-        return (int) (toolProp.getToolDurability() * 0.1f);
-    }
-
-    private static int calcExtraDurability(int durability) {
-        return (int) (durability * 0.15f);
-    }
-
-    /**
-     * Calculates arrow shaft stats from GT tool properties.
-     * Reference (TiC native): wood modifier=1.0/bonus=0.0, prismarine modifier=1.5/bonus=0.5.
-     * GT metals are generally better shafts: modifier scales with attack, bonus damage also scales.
-     */
-    private static ArrowShaftMaterialStats calcShaftStats(ToolProperty toolProp) {
-        float attack = toolProp.getToolAttackDamage();
-        // modifier: 0.8 base + attack contribution, clamped [0.5, 3.0]
-        float modifier = Math.max(0.5f, Math.min(3.0f, 0.8f + attack * 0.04f));
-        // bonusAmmo: bonus arrows per shot, scales with attack, clamped [0, 10]
-        int bonusAmmo = Math.min(10, (int) (attack / 5f));
-        return new ArrowShaftMaterialStats(modifier, bonusAmmo);
-    }
-
-    /**
-     * Calculates bow stats from GT tool properties.
-     * Reference (TiC native): iron drawspeed=0.5, range=1.5, bonusDamage=7.
-     */
-    private static BowMaterialStats calcBowStats(ToolProperty toolProp) {
-        float speed = toolProp.getToolSpeed();
-        float attack = toolProp.getToolAttackDamage();
-        float drawspeed = Math.max(0.2f, Math.min(1.5f, 1.0f / (1.0f + speed * 0.1f)));
-        float range = Math.max(0.4f, Math.min(3.0f, 0.5f + speed * 0.15f));
-        float bonusDamage = Math.max(0f, Math.min(15f, attack * 1.2f));
-        return new BowMaterialStats(drawspeed, range, bonusDamage);
-    }
-
-    private static Fluid getFluid(Material material) {
+    static Fluid getFluid(Material material) {
         if (!material.hasProperty(PropertyKey.FLUID)) return null;
         Fluid fluid = material.getFluid();
         return (fluid != null && FluidRegistry.isFluidRegistered(fluid)) ? fluid : null;
+    }
+
+    static List<MaterialIntegration> getIntegrations() {
+        return integrations;
     }
 }
