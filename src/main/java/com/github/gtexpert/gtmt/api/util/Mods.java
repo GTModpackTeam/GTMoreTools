@@ -68,6 +68,7 @@ public enum Mods {
     ProjectRedIllumination(Names.PROJECT_RED_ILLUMINATION),
     Railcraft(Names.RAILCRAFT),
     RefinedStorage(Names.REFINED_STORAGE),
+    StorageDrawers(Names.STORAGE_DRAWERS),
     Thaumcraft(Names.THAUMCRAFT),
     ThaumicEnergistics(Names.THAUMIC_ENERGISTICS),
     TheOneProbe(Names.THE_ONE_PROBE),
@@ -143,6 +144,7 @@ public enum Mods {
         public static final String PROJECT_RED_ILLUMINATION = "projectred-illumination";
         public static final String RAILCRAFT = "railcraft";
         public static final String REFINED_STORAGE = "refinedstorage";
+        public static final String STORAGE_DRAWERS = "storagedrawers";
         public static final String THAUMCRAFT = "thaumcraft";
         public static final String THAUMIC_ENERGISTICS = "thaumicenergistics";
         public static final String THE_ONE_PROBE = "theoneprobe";
