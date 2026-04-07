@@ -25,3 +25,16 @@ gtmt.machine.auto_chisel.uv.tooltip=Your ideal, we will sculpt it/nMaterial in t
 
 # recipemaps
 recipemap.auto_chisel.name=Auto Chisel
+
+# Tinkers' Construct integration — custom traits
+modifier.gtmt_heat_resistant.name=Heat Resistant
+modifier.gtmt_heat_resistant.desc=§oJust getting warmed up§r\nMining speed +30% in the Nether.
+modifier.gtmt_anti_corrosion.name=Anti-Corrosion
+modifier.gtmt_anti_corrosion.desc=§oNo rust, no rot, no compromise!§r\n15% chance to negate durability loss.
+modifier.gtmt_cryogenic.name=Cryogenic
+modifier.gtmt_cryogenic.desc=§oChill out!§r\nApplies Slowness on hit.
+modifier.gtmt_heavy_blow.name=Heavy Blow
+modifier.gtmt_heavy_blow.desc=§oSend them flying!§r\nIncreases knockback by 50%.
+modifier.gtmt_unbreakable.name=Unbreakable
+modifier.gtmt_unbreakable.desc=§oEternal, Absolute§r\nThis tool will never break.
+gtmt.trait.ench.desc=§o%s§r\nApplies this enchantment permanently.
