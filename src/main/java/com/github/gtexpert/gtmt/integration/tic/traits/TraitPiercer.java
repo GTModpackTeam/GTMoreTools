@@ -14,7 +14,7 @@ import slimeknights.tconstruct.library.traits.AbstractTrait;
  */
 public class TraitPiercer extends AbstractTrait {
 
-    private static final float BONUS_MULTIPLIER = 1.5f;
+    private static final float BONUS_MULTIPLIER = 0.5f;
 
     public TraitPiercer() {
         super("gtmt_piercer", 0xA9A9A9);

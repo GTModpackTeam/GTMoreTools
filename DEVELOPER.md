@@ -9,7 +9,7 @@ The table below shows current coverage:
 | Better Builder's Wands | — | No API yet |
 | Chisel | — | No API yet |
 
-All registration calls must happen during your mod's `preInit` or `init` phase,
+All registration calls must happen during your mod's `preInit` phase,
 **before** GTMT's `registerBlocks`, unless stated otherwise.
 
 ---

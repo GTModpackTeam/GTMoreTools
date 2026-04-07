@@ -60,7 +60,7 @@ public final class TiCSmeltery {
             // Always: dust-family (no doubling — already processed)
             tryRegister(OrePrefix.dust, gtMaterial, fluid, VALUE_Ingot, temp);
             tryRegister(OrePrefix.dustSmall, gtMaterial, fluid, VALUE_Ingot / 4, temp);
-            tryRegister(OrePrefix.dustTiny, gtMaterial, fluid, VALUE_Ingot / 9 + 1, temp);
+            tryRegister(OrePrefix.dustTiny, gtMaterial, fluid, VALUE_Ingot / 9, temp);
 
             // Config-gated: ore and crushed-ore variants
             if (TiCConfigHolder.smelteryOreMelting) {
