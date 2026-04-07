@@ -37,7 +37,13 @@ This mod is an add-on for GregTech CEu that provides integration with various mo
 - GT ToolProperty enchantments (e.g. Fortune, Looting) are automatically applied to TiC parts as traits
 - Harvest levels beyond Cobalt are registered dynamically for GT materials with harvest level 5+
 - If a GT material shares a name with an existing TiC material (e.g. Flint, Diamond), stats are merged by taking the better value per stat rather than skipping the material
+- GT material fluids can be melted in the TiC Smeltery (ingot, nugget, dust, gem, and optionally ore variants). Raw ore doubling is disabled by default to preserve GT ore-processing progression (configurable)
 
+
+## For Addon Developers
+
+GTMoreTools exposes a public API for extending the Tinkers' Construct integration.
+See **[DEVELOPER.md](DEVELOPER.md)** for the full guide.
 
 ## Credits
 
