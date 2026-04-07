@@ -1,3 +1,15 @@
+# v1.2.2
+## Tinkers' Construct Integration
+- GT material fluids are now registered as TiC Smeltery melting recipes (ingot, nugget, block, dust, gem families always; ore/crushed variants behind `smelteryOreMelting` config). Raw ore doubling is disabled by default (`smelteryOreDoubling=false`) to preserve GT ore-processing progression.
+- New traits: **Piercer** (bonus damage vs armored targets, GT harvest level ≥ 5) and **Moonlit** (+50% mining speed and +3 damage at night, precious-metal bearing materials)
+- Added `integration.tic.api` package exposing a stable API for addon mods:
+  - `TraitRegistry` — register custom composition-based and property-based trait assignment rules
+  - `HarvestLevels` — register custom display names for harvest levels above Cobalt (5+)
+  - `SmelteryHelper` — register additional Smeltery melting recipes for custom GT materials
+- All hardcoded trait conditions (Silver→Holy, precious metals→Moonlit, blast temp tiers, durability, etc.) are now driven through `TraitRegistry` and can be extended or supplemented by other mods
+
+* * *
+
 # v1.2.1
 ## Tinkers' Construct Integration
 - Traits are automatically assigned from GT material properties (no hardcoded material lists):

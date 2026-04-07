@@ -38,6 +38,12 @@ public final class GTMTTraits {
     /** Knockback +50 % — materials with attack damage ≥ 10. */
     public static final AbstractTrait HEAVY_BLOW = new TraitHeavyBlow();
 
+    /** Bonus damage vs armored targets — GT harvest level ≥ 5 (Cobalt tier and above). */
+    public static final AbstractTrait PIERCER = new TraitPiercer();
+
+    /** +50 % mining speed and +3 damage at night — materials containing Gold, Platinum, Palladium, or Iridium. */
+    public static final AbstractTrait MOONLIT = new TraitMoonlit();
+
     /** Zero durability loss — GT {@code isUnbreakable} flag. */
     public static final AbstractTrait UNBREAKABLE = new TraitUnbreakable();
 

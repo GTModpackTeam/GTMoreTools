@@ -35,6 +35,7 @@ public class TiCModule extends IntegrationSubmodule {
     @Override
     public void registerBlocks(RegistryEvent.Register<Block> event) {
         TiCMaterials.register(event.getRegistry());
+        TiCSmeltery.register();
     }
 
     @SubscribeEvent

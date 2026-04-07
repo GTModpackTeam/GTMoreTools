@@ -3,9 +3,7 @@ package com.github.gtexpert.gtmt.integration.tic;
 import java.io.ByteArrayInputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 import net.minecraft.block.Block;
 import net.minecraft.util.text.TextFormatting;
@@ -16,13 +14,13 @@ import net.minecraftforge.registries.IForgeRegistry;
 
 import gregtech.api.GregTechAPI;
 import gregtech.api.unification.material.Material;
-import gregtech.api.unification.material.Materials;
 import gregtech.api.unification.material.properties.PropertyKey;
 import gregtech.api.unification.material.properties.ToolProperty;
 import gregtech.api.unification.stack.MaterialStack;
 
 import com.github.gtexpert.gtmt.api.ModValues;
-import com.github.gtexpert.gtmt.integration.tic.traits.GTMTTraits;
+import com.github.gtexpert.gtmt.integration.tic.api.HarvestLevels;
+import com.github.gtexpert.gtmt.integration.tic.api.TraitRegistry;
 
 import slimeknights.tconstruct.library.MaterialIntegration;
 import slimeknights.tconstruct.library.TinkerRegistry;
@@ -31,18 +29,10 @@ import slimeknights.tconstruct.library.materials.BowMaterialStats;
 import slimeknights.tconstruct.library.materials.ExtraMaterialStats;
 import slimeknights.tconstruct.library.materials.HandleMaterialStats;
 import slimeknights.tconstruct.library.materials.HeadMaterialStats;
-import slimeknights.tconstruct.library.utils.HarvestLevels;
-import slimeknights.tconstruct.tools.TinkerTraits;
 
 public final class TiCMaterials {
 
     private static final List<MaterialIntegration> integrations = new ArrayList<>();
-
-    /**
-     * Tracks harvest level name for the first GT material seen at each level beyond Cobalt (4).
-     * Key = TiC harvest level, Value = localized material name.
-     */
-    private static final Map<Integer, String> pendingHarvestLevelNames = new LinkedHashMap<>();
 
     /** TiC harvest level colors for levels beyond Cobalt (4). */
     private static final TextFormatting[] EXTRA_LEVEL_COLORS = {
@@ -167,8 +157,8 @@ public final class TiCMaterials {
         }
 
         // Harvest level name tracking
-        if (ticHL > 4 && !pendingHarvestLevelNames.containsKey(ticHL)) {
-            pendingHarvestLevelNames.put(ticHL, gtMaterial.getLocalizedName());
+        if (ticHL > 4) {
+            HarvestLevels.registerIfAbsent(ticHL, gtMaterial.getLocalizedName());
         }
 
         // Apply GT traits/enchantments on top of the existing TiC traits
@@ -194,8 +184,8 @@ public final class TiCMaterials {
         float attack = toolProp.getToolAttackDamage();
         int ticHarvestLevel = mapHarvestLevel(toolProp.getToolHarvestLevel());
 
-        if (ticHarvestLevel > 4 && !pendingHarvestLevelNames.containsKey(ticHarvestLevel)) {
-            pendingHarvestLevelNames.put(ticHarvestLevel, gtMaterial.getLocalizedName());
+        if (ticHarvestLevel > 4) {
+            HarvestLevels.registerIfAbsent(ticHarvestLevel, gtMaterial.getLocalizedName());
         }
 
         TinkerRegistry.addMaterialStats(ticMaterial,
@@ -207,7 +197,7 @@ public final class TiCMaterials {
 
         applyTraits(ticMaterial, gtMaterial, toolProp);
 
-        String oreSuffix = toPascalCase(gtMaterial.getName());
+        String oreSuffix = gtMaterial.toCamelCaseString();
         Fluid fluid = getFluid(gtMaterial);
 
         if (gtMaterial.hasProperty(PropertyKey.INGOT) && oreSuffix != null) {
@@ -246,66 +236,52 @@ public final class TiCMaterials {
     // -------------------------------------------------------------------------
 
     /**
-     * Assigns TiC traits based on GT material properties — no material-name hardcoding.
+     * Assigns TiC traits from the two {@link TraitRegistry} registries, then handles
+     * per-enchantment traits from the GT tool property.
      *
-     * <ul>
-     * <li><b>Holy</b>: direct composition contains Silver</li>
-     * <li><b>Heat Resistant</b>: blast temp ≥ 2500 K</li>
-     * <li><b>Cryogenic</b>: blast temp in [1750, 2500) — vacuum-freezer processed</li>
-     * <li><b>Anti-Corrosion</b>: durability ≥ 2000 and not already unbreakable</li>
-     * <li><b>Heavy Blow</b>: attack damage ≥ 10</li>
-     * <li><b>Magnetic</b>: GT {@code isMagnetic} flag</li>
-     * <li><b>Unbreakable</b>: GT {@code isUnbreakable} flag</li>
-     * <li><b>Enchantment traits</b>: each GT ToolProperty enchantment</li>
-     * </ul>
+     * <p>
+     * All default rules (Holy, HeatResistant, Cryogenic, AntiCorrosion, HeavyBlow,
+     * Piercer, Magnetic, Unbreakable, Moonlit) are registered in {@link TraitRegistry}'s
+     * static initialiser and are extensible via
+     * {@link TraitRegistry#registerCompositionTrait} and
+     * {@link TraitRegistry#registerPropertyTrait}.
      */
     private static void applyTraits(slimeknights.tconstruct.library.materials.Material ticMaterial,
                                     Material gtMaterial, ToolProperty toolProp) {
-        int blastTemp = gtMaterial.getBlastTemperature();
-        int durability = toolProp.getToolDurability();
-        float attack = toolProp.getToolAttackDamage();
+        // Composition-based traits (e.g. contains Silver → Holy, contains Gold → Moonlit)
+        TraitRegistry.getCompositionTraits().forEach((component, entries) -> {
+            if (containsMaterial(gtMaterial, component)) {
+                for (TraitRegistry.TraitEntry entry : entries) {
+                    if (entry.slot() != null) ticMaterial.addTrait(entry.trait(), entry.slot());
+                    else ticMaterial.addTrait(entry.trait());
+                }
+            }
+        });
 
-        if (containsMaterial(gtMaterial, Materials.Silver)) {
-            ticMaterial.addTrait(TinkerTraits.holy, "head");
+        // Property-based traits (e.g. blast temp ≥ 2500 → HeatResistant)
+        for (TraitRegistry.PropertyEntry entry : TraitRegistry.getPropertyTraits()) {
+            if (entry.condition().test(gtMaterial, toolProp)) {
+                if (entry.slot() != null) ticMaterial.addTrait(entry.trait(), entry.slot());
+                else ticMaterial.addTrait(entry.trait());
+            }
         }
 
-        if (blastTemp >= 2500) {
-            ticMaterial.addTrait(GTMTTraits.HEAT_RESISTANT, "head");
-        } else if (blastTemp >= 1750) {
-            ticMaterial.addTrait(GTMTTraits.CRYOGENIC, "head");
-        }
-
-        if (!toolProp.getUnbreakable() && durability >= 2000) {
-            ticMaterial.addTrait(GTMTTraits.ANTI_CORROSION);
-        }
-
-        if (attack >= 10.0f) {
-            ticMaterial.addTrait(GTMTTraits.HEAVY_BLOW, "head");
-        }
-
-        if (toolProp.isMagnetic()) {
-            ticMaterial.addTrait(TinkerTraits.magnetic);
-        }
-        if (toolProp.getUnbreakable()) {
-            ticMaterial.addTrait(GTMTTraits.UNBREAKABLE);
-        }
-
+        // Enchantment traits — dynamic per-enchantment, not suitable for the static registry
         toolProp.getEnchantments().forEach((enchantment, enchLevel) -> {
             int level = enchLevel.getLevel(toolProp.getToolHarvestLevel());
             if (level > 0) {
-                ticMaterial.addTrait(GTMTTraits.getOrCreateEnchantmentTrait(enchantment, level), "head");
+                ticMaterial.addTrait(TraitRegistry.getOrCreateEnchantmentTrait(enchantment, level), "head");
             }
         });
     }
 
-    /** Register names for harvest levels beyond TiC's native Cobalt (4). */
+    /** Apply all registered harvest-level names (GTMT auto-assigned + external) to TiC. */
     private static void registerHarvestLevelNames() {
-        for (Map.Entry<Integer, String> entry : pendingHarvestLevelNames.entrySet()) {
-            int level = entry.getKey();
-            String name = entry.getValue();
+        HarvestLevels.getNames().forEach((level, name) -> {
             int colorIndex = Math.min(level - 5, EXTRA_LEVEL_COLORS.length - 1);
-            HarvestLevels.harvestLevelNames.put(level, EXTRA_LEVEL_COLORS[colorIndex] + name);
-        }
+            slimeknights.tconstruct.library.utils.HarvestLevels.harvestLevelNames.put(level,
+                    EXTRA_LEVEL_COLORS[colorIndex] + name);
+        });
     }
 
     /** Check whether a material's direct composition contains the given target material. */
@@ -380,20 +356,5 @@ public final class TiCMaterials {
         if (!material.hasProperty(PropertyKey.FLUID)) return null;
         Fluid fluid = material.getFluid();
         return (fluid != null && FluidRegistry.isFluidRegistered(fluid)) ? fluid : null;
-    }
-
-    private static String toPascalCase(String name) {
-        if (name == null || name.isEmpty()) return null;
-        StringBuilder sb = new StringBuilder();
-        boolean cap = true;
-        for (char c : name.toCharArray()) {
-            if (c == '_') {
-                cap = true;
-            } else {
-                sb.append(cap ? Character.toUpperCase(c) : c);
-                cap = false;
-            }
-        }
-        return sb.toString();
     }
 }
