@@ -1,16 +1,17 @@
 package com.github.gtexpert.gtmt.integration.tic.traits;
 
-import net.minecraft.client.resources.I18n;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
+import net.minecraft.util.text.translation.I18n;
 
 import slimeknights.tconstruct.library.traits.AbstractTrait;
 
 /**
  * A generic TiC trait that bakes a vanilla enchantment into the tool's NBT.
  *
- * <p>Instances are created dynamically from a GT material's
+ * <p>
+ * Instances are created dynamically from a GT material's
  * {@code ToolProperty} enchantment map and cached in {@link GTMTTraits}.
  * If the same enchantment is already present at a higher level it is left unchanged;
  * if it is present at a lower level the level is upgraded.
@@ -34,7 +35,7 @@ public class TraitEnchantment extends AbstractTrait {
     @Override
     public String getLocalizedDesc() {
         // §o%s§r\n<desc> — the %s is replaced with the enchantment name (italic, material-colored)
-        return I18n.format("gtmt.trait.ench.desc", enchantment.getTranslatedName(level));
+        return I18n.translateToLocalFormatted("gtmt.trait.ench.desc", enchantment.getTranslatedName(level));
     }
 
     @Override
