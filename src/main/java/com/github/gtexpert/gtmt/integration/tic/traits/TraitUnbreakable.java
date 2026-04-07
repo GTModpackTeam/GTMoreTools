@@ -8,7 +8,8 @@ import slimeknights.tconstruct.library.traits.AbstractTrait;
 /**
  * Overrides every durability-damage event to 0, making the tool truly indestructible.
  *
- * <p>Assigned to GT materials whose {@code ToolProperty#isUnbreakable} flag is set.
+ * <p>
+ * Assigned to GT materials whose {@code ToolProperty#isUnbreakable} flag is set.
  */
 public class TraitUnbreakable extends AbstractTrait {
 

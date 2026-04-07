@@ -10,7 +10,8 @@ import slimeknights.tconstruct.library.traits.AbstractTrait;
 /**
  * Applies Slowness I for 2 seconds to the target on a successful hit.
  *
- * <p>Assigned to materials with a blast furnace temperature in [1750, 2500) K
+ * <p>
+ * Assigned to materials with a blast furnace temperature in [1750, 2500) K
  * (i.e. those that require vacuum-freezer processing).
  */
 public class TraitCryogenic extends AbstractTrait {

@@ -8,7 +8,8 @@ import slimeknights.tconstruct.library.traits.AbstractTrait;
 /**
  * Each durability-damage event has a {@value #NEGATE_CHANCE} (15 %) chance of being negated entirely.
  *
- * <p>Assigned to non-unbreakable materials with a tool durability ≥ 2000.
+ * <p>
+ * Assigned to non-unbreakable materials with a tool durability ≥ 2000.
  */
 public class TraitAntiCorrosion extends AbstractTrait {
 

@@ -8,7 +8,8 @@ import slimeknights.tconstruct.library.traits.AbstractTrait;
 /**
  * Increases mining speed by {@value #NETHER_SPEED_BONUS} (30 %) while in the Nether (dimension -1).
  *
- * <p>Assigned to materials with a blast furnace temperature ≥ 2500 K.
+ * <p>
+ * Assigned to materials with a blast furnace temperature ≥ 2500 K.
  */
 public class TraitHeatResistant extends AbstractTrait {
 

@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+
 import net.minecraft.block.Block;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.translation.LanguageMap;
@@ -56,19 +57,20 @@ public final class TiCMaterials {
      * Called during registerBlocks when GT materials are available.
      * Also registers fluid blocks into the block registry.
      *
-     * <p>For each GT tool material:
+     * <p>
+     * For each GT tool material:
      * <ul>
-     *   <li>If TiC already has a material with the same name → <b>merge</b>: take max stats
-     *       and add GT enchantments/traits to the existing material.</li>
-     *   <li>Otherwise → <b>register</b>: create a new TiC material.</li>
+     * <li>If TiC already has a material with the same name → <b>merge</b>: take max stats
+     * and add GT enchantments/traits to the existing material.</li>
+     * <li>Otherwise → <b>register</b>: create a new TiC material.</li>
      * </ul>
      */
     public static void register(IForgeRegistry<Block> blockRegistry) {
         for (Material gtMaterial : GregTechAPI.materialManager.getRegisteredMaterials()) {
             if (!gtMaterial.hasProperty(PropertyKey.TOOL)) continue;
             if (!gtMaterial.hasProperty(PropertyKey.INGOT) && !gtMaterial.hasProperty(PropertyKey.GEM)) continue;
-            slimeknights.tconstruct.library.materials.Material existing =
-                    TinkerRegistry.getMaterial(gtMaterial.getName());
+            slimeknights.tconstruct.library.materials.Material existing = TinkerRegistry
+                    .getMaterial(gtMaterial.getName());
 
             if (!existing.identifier.equals(
                     slimeknights.tconstruct.library.materials.Material.UNKNOWN.identifier)) {
@@ -182,8 +184,8 @@ public final class TiCMaterials {
         int color = gtMaterial.getMaterialRGB();
         ToolProperty toolProp = gtMaterial.getProperty(PropertyKey.TOOL);
 
-        slimeknights.tconstruct.library.materials.Material ticMaterial =
-                new slimeknights.tconstruct.library.materials.Material(identifier, color, true);
+        slimeknights.tconstruct.library.materials.Material ticMaterial = new slimeknights.tconstruct.library.materials.Material(
+                identifier, color, true);
 
         injectTranslation(identifier, gtMaterial);
 
@@ -385,7 +387,12 @@ public final class TiCMaterials {
         StringBuilder sb = new StringBuilder();
         boolean cap = true;
         for (char c : name.toCharArray()) {
-            if (c == '_') { cap = true; } else { sb.append(cap ? Character.toUpperCase(c) : c); cap = false; }
+            if (c == '_') {
+                cap = true;
+            } else {
+                sb.append(cap ? Character.toUpperCase(c) : c);
+                cap = false;
+            }
         }
         return sb.toString();
     }

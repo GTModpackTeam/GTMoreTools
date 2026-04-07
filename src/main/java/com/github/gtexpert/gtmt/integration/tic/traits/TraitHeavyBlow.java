@@ -8,7 +8,8 @@ import slimeknights.tconstruct.library.traits.AbstractTrait;
 /**
  * Multiplies the base knockback by (1 + {@value #KNOCKBACK_BONUS}), effectively +50 %.
  *
- * <p>Assigned to materials with an attack damage value ≥ 10.
+ * <p>
+ * Assigned to materials with an attack damage value ≥ 10.
  */
 public class TraitHeavyBlow extends AbstractTrait {
 

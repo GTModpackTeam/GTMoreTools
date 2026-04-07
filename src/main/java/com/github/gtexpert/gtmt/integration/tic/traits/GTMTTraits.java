@@ -10,14 +10,17 @@ import slimeknights.tconstruct.library.traits.AbstractTrait;
 /**
  * Registry for all GTMT custom TiC traits.
  *
- * <p>Static traits are auto-registered with {@code TinkerRegistry} on class initialisation.
+ * <p>
+ * Static traits are auto-registered with {@code TinkerRegistry} on class initialisation.
  * Their display names and descriptions live in the mod's lang files
  * ({@code assets/gtmt/lang/}) under {@code modifier.<id>.name} / {@code modifier.<id>.desc}.
  *
- * <p>Note: undead bonus-damage is handled by TiC's built-in {@code TinkerTraits#holy};
+ * <p>
+ * Note: undead bonus-damage is handled by TiC's built-in {@code TinkerTraits#holy};
  * this class only defines traits that have no TiC equivalent.
  *
- * <p>Dynamic enchantment traits are created on demand via
+ * <p>
+ * Dynamic enchantment traits are created on demand via
  * {@link #getOrCreateEnchantmentTrait(Enchantment, int)} and their translations are injected
  * at runtime because the set of enchantments is not known at compile time.
  */
@@ -51,11 +54,9 @@ public final class GTMTTraits {
      */
     public static AbstractTrait getOrCreateEnchantmentTrait(Enchantment enchantment, int level) {
         String id = "gtmt_ench_" + enchantment.getRegistryName().getPath() +
-                    (level > 1 ? "_" + level : "");
+                (level > 1 ? "_" + level : "");
         return enchantmentTraitCache.computeIfAbsent(id, k -> {
-            int color = enchantment.type != null
-                    ? enchantment.type.ordinal() * 0x112233 + 0x4488BB
-                    : 0xFFD700;
+            int color = enchantment.type != null ? enchantment.type.ordinal() * 0x112233 + 0x4488BB : 0xFFD700;
             return new TraitEnchantment(id, color, enchantment, level);
         });
     }
