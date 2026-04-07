@@ -55,11 +55,15 @@ public final class TraitRegistry {
         }
 
         /** The TiC trait to add. */
-        public AbstractTrait trait() { return trait; }
+        public AbstractTrait trait() {
+            return trait;
+        }
 
         /** The part slot (e.g. {@code "head"}), or {@code null} to apply to all slots. */
         @Nullable
-        public String slot() { return slot; }
+        public String slot() {
+            return slot;
+        }
     }
 
     /**
@@ -86,14 +90,20 @@ public final class TraitRegistry {
         }
 
         /** The predicate to evaluate. */
-        public TraitCondition condition() { return condition; }
+        public TraitCondition condition() {
+            return condition;
+        }
 
         /** The trait to add when the condition is true. */
-        public AbstractTrait trait() { return trait; }
+        public AbstractTrait trait() {
+            return trait;
+        }
 
         /** The part slot, or {@code null} for all slots. */
         @Nullable
-        public String slot() { return slot; }
+        public String slot() {
+            return slot;
+        }
     }
 
     // -------------------------------------------------------------------------
