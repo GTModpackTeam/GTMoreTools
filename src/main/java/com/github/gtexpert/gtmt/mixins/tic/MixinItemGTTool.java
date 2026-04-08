@@ -1,5 +1,8 @@
 package com.github.gtexpert.gtmt.mixins.tic;
 
+import javax.annotation.Nullable;
+
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -19,10 +22,6 @@ import slimeknights.tconstruct.library.tools.TinkerToolCore;
 /**
  * Replicates the hand-swap logic from {@code ToolCore.onBlockStartBreak} for GT tools.
  *
- * <p>
- * When the GT main-hand tool cannot harvest a block but the TiC off-hand tool can,
- * this Mixin swaps the items and sets the {@code SwitchedHand} NBT tag so that
- * {@code ToolCore.onBlockDestroyed} automatically swaps them back after the break.
  */
 @Mixin(value = ItemGTTool.class, remap = false)
 public class MixinItemGTTool {
@@ -35,17 +34,27 @@ public class MixinItemGTTool {
 
         if (!DualToolHarvestUtils.shouldUseOffhand(player, pos, stack)) return;
 
-        // Replicate ToolCore.onBlockStartBreak swap logic:
-        // 1) swap hands
         player.setHeldItem(EnumHand.MAIN_HAND, offhand);
         player.setHeldItem(EnumHand.OFF_HAND, stack);
 
-        // 2) tag the TiC tool (now main-hand) so ToolCore.onBlockDestroyed swaps back
         NBTTagCompound tag = offhand.hasTagCompound() ? offhand.getTagCompound() : new NBTTagCompound();
         tag.setLong("SwitchedHand", player.getEntityWorld().getTotalWorldTime());
         offhand.setTagCompound(tag);
 
-        // Return false → vanilla continues the block break with the TiC tool as main-hand
         cir.setReturnValue(false);
+    }
+
+    @Inject(method = "getHarvestLevel", at = @At("RETURN"), cancellable = true)
+    private void elevateHarvestLevelFromOffHand(ItemStack stack, String toolClass,
+                                                @Nullable EntityPlayer player, @Nullable IBlockState state,
+                                                CallbackInfoReturnable<Integer> cir) {
+        if (player == null || state == null) return;
+        ItemStack offhand = player.getHeldItemOffhand();
+        if (offhand.isEmpty() || !(offhand.getItem() instanceof TinkerToolCore)) return;
+        int currentLevel = cir.getReturnValue();
+        int ticLevel = offhand.getItem().getHarvestLevel(offhand, toolClass, null, state);
+        if (ticLevel > currentLevel) {
+            cir.setReturnValue(ticLevel);
+        }
     }
 }

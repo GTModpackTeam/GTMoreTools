@@ -238,8 +238,7 @@ public final class ToolMaterialRegistrar {
     private static void registerHarvestLevelNames() {
         // Override TiC's native names (0–4) with vanilla/GT naming convention
         // so that the same harvest level shows the same name in both GT and TiC tooltips.
-        java.util.Map<Integer, String> ticNames =
-                slimeknights.tconstruct.library.utils.HarvestLevels.harvestLevelNames;
+        java.util.Map<Integer, String> ticNames = slimeknights.tconstruct.library.utils.HarvestLevels.harvestLevelNames;
         ticNames.put(0, TextFormatting.DARK_GREEN + "Wood");
         ticNames.put(1, TextFormatting.GRAY + "Stone");
         ticNames.put(2, TextFormatting.WHITE + "Iron");

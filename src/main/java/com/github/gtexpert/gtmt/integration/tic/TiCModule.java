@@ -1,6 +1,6 @@
 package com.github.gtexpert.gtmt.integration.tic;
 
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.List;
 
 import net.minecraft.block.Block;
@@ -31,7 +31,7 @@ public class TiCModule extends IntegrationSubmodule {
     @NotNull
     @Override
     public List<Class<?>> getEventBusSubscribers() {
-        return Collections.singletonList(TiCModule.class);
+        return Arrays.asList(TiCModule.class, DualToolHandler.class);
     }
 
     @Override

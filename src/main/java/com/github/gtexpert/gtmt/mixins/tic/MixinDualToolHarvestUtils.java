@@ -37,7 +37,7 @@ public class MixinDualToolHarvestUtils {
         if (tool.isEmpty() || offhand.isEmpty() || state == null) return;
 
         boolean isCrossCombo = (tool.getItem() instanceof IGTTool && offhand.getItem() instanceof TinkerToolCore) ||
-                               (tool.getItem() instanceof TinkerToolCore && offhand.getItem() instanceof IGTTool);
+                (tool.getItem() instanceof TinkerToolCore && offhand.getItem() instanceof IGTTool);
         if (!isCrossCombo) return;
 
         if (!gtmt$canHarvest(tool, state, player) && gtmt$canHarvest(offhand, state, player)) {
@@ -58,7 +58,7 @@ public class MixinDualToolHarvestUtils {
         if (tool.isEmpty() || offhand.isEmpty() || state == null) return;
 
         boolean isCrossCombo = (tool.getItem() instanceof IGTTool && offhand.getItem() instanceof TinkerToolCore) ||
-                               (tool.getItem() instanceof TinkerToolCore && offhand.getItem() instanceof IGTTool);
+                (tool.getItem() instanceof TinkerToolCore && offhand.getItem() instanceof IGTTool);
         if (!isCrossCombo) return;
 
         if (!gtmt$canHarvest(tool, state, player) && gtmt$canHarvest(offhand, state, player)) {
@@ -67,10 +67,9 @@ public class MixinDualToolHarvestUtils {
     }
 
     /**
-     * Harvest check using {@code Item.getHarvestLevel}.
-     * For TiC tools, passes {@code null} player to avoid infinite recursion
-     * ({@code TinkerToolCore.getHarvestLevel} calls {@code shouldUseOffhand}
-     * when player is non-null, which re-enters this Mixin).
+     * Always passes {@code null} for player to {@code getHarvestLevel} to get the raw level,
+     * bypassing both TiC's {@code shouldUseOffhand} recursion guard and GT's harvest-level
+     * elevation from {@link MixinItemGTTool}.
      */
     @Unique
     private static boolean gtmt$canHarvest(ItemStack stack, IBlockState state, EntityPlayer player) {
@@ -79,7 +78,6 @@ public class MixinDualToolHarvestUtils {
         String toolType = block.getHarvestTool(state);
         int requiredLevel = block.getHarvestLevel(state);
         if (toolType == null || requiredLevel < 0) return true;
-        EntityPlayer p = (stack.getItem() instanceof TinkerToolCore) ? null : player;
-        return stack.getItem().getHarvestLevel(stack, toolType, p, state) >= requiredLevel;
+        return stack.getItem().getHarvestLevel(stack, toolType, null, state) >= requiredLevel;
     }
 }
