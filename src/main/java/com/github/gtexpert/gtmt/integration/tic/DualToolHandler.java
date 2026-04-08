@@ -2,7 +2,9 @@ package com.github.gtexpert.gtmt.integration.tic;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Enchantments;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.ForgeHooks;
@@ -52,7 +54,12 @@ public final class DualToolHandler {
 
         if (mainhand.getItem() instanceof TinkerToolCore && offhand.getItem() instanceof IGTTool) {
             if (!ToolHelper.canHarvest(mainhand, state) && canHarvestForDrops(player, offhand, state)) {
-                event.setNewSpeed(offhand.getItem().getDestroySpeed(offhand, state));
+                float speed = offhand.getItem().getDestroySpeed(offhand, state);
+                if (speed > 1.0f) {
+                    int efficiency = EnchantmentHelper.getEnchantmentLevel(Enchantments.EFFICIENCY, offhand);
+                    if (efficiency > 0) speed += efficiency * efficiency + 1;
+                }
+                event.setNewSpeed(speed);
             }
         }
     }
