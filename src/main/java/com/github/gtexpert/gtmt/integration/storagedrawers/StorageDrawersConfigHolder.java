@@ -16,11 +16,14 @@ public class StorageDrawersConfigHolder {
 
     @Config.Comment({ "Specifies the materials that can be used to craft Storage Upgrades.",
             "Format: modId:materialName@multiplier$tier",
-            "\"tier\" represents the required material voltage and can be set from 1 (LV) to 8 (UV).",
-            "The \"tier\" field is optional and defaults to 1 (LV) if omitted.",
+            "\"tier\" represents the required field generator tier and can be set from 1 (LV) to 8 (UV).",
+            "The \"tier\" field is optional and defaults to -1 (field generator is not required) if omitted.",
             "Note: the \"multiplier\" value is not affected by StorageDrawers's config.",
-            "If this entry is left empty, variants using the original materials with the same multipliers will be added at tier 1." })
+            "The range of \"multiplier\" is 1 to (2,147,483,647 / (1x1 Drawer Capacity * 64 * 7)) (default: 149796)",
+            "Original materials (Obsidian/Iron/Gold/Diamond/Emerald) are automatically added with tier -1.",
+            "Do not specify them here.",
+            "The multiplier values for original materials are controlled by the StorageDrawers config.",
+            "If this entry is left empty, only the original materials will be added." })
     public static String[] upgradeMaterials = new String[] {
-            "gregtech:obsidian@2", "gregtech:iron@4", "gregtech:gold@8", "gregtech:diamond@16", "gregtech:emerald@32"
     };
 }
