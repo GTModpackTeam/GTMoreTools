@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import net.minecraft.util.math.MathHelper;
+
 import gregtech.api.GTValues;
 import gregtech.api.GregTechAPI;
 import gregtech.api.unification.material.Material;
@@ -21,8 +23,8 @@ public class StorageDrawersUtil {
         List<UpgradeMaterialData> result = new ArrayList<>();
 
         if (entries.length == 0) {
-            entries = new String[] { "gregtech:obsidian@2", "gregtech:iron@3", "gregtech:gold@4", "gregtech:diamond@5",
-                    "gregtech:emerald@6" };
+            entries = new String[] { "gregtech:obsidian@2", "gregtech:iron@4", "gregtech:gold@8", "gregtech:diamond@16",
+                    "gregtech:emerald@32" };
         }
 
         for (String entry : entries) {
@@ -60,13 +62,20 @@ public class StorageDrawersUtil {
             }
 
             int tier = 1;
+            int value;
             if (percentSplit.length == 2 && !percentSplit[1].isEmpty()) {
                 try {
-                    tier = Integer.parseInt(percentSplit[1]);
+                    value = Integer.parseInt(percentSplit[1]);
                 } catch (NumberFormatException e) {
                     ModLog.logger.warn("Invalid tier: " + entry, e);
                     continue;
                 }
+
+                if (value < 0 || 8 < value) {
+                    tier = MathHelper.clamp(value, 1, 8);
+                    ModLog.logger.warn("Tier is out of range. Fallback to {}", tier);
+                } else
+                    tier = value;
             }
             if (check.containsKey(id)) {
                 ModLog.logger.warn("Duplicate id: {}", id);
