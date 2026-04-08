@@ -1,3 +1,12 @@
+# v1.2.3
+## Tinkers' Construct Integration
+- GT tool in main-hand + TiC tool in off-hand (and vice versa) now mines blocks using the off-hand tool
+  - Mining speed is taken from the off-hand tool
+  - Blocks drop items even when the main-hand tool has insufficient harvest level, using the off-hand tool
+  - HUD mods (e.g. HWYLA) now show the correct can-harvest indicator (✓/×) based on the off-hand tool
+
+* * *
+
 # v1.2.2
 ## Tinkers' Construct Integration
 - GT material fluids are now registered as TiC Smeltery melting recipes (ingot, nugget, block, dust, gem families always; ore/crushed variants behind `smelteryOreMelting` config). Raw ore doubling is disabled by default (`smelteryOreDoubling=false`) to preserve GT ore-processing progression.
