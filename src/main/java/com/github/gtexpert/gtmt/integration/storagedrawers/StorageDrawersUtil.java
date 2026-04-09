@@ -8,13 +8,13 @@ import java.util.Map;
 import net.minecraft.util.math.MathHelper;
 
 import com.jaquadro.minecraft.storagedrawers.StorageDrawers;
-import com.jaquadro.minecraft.storagedrawers.api.storage.EnumBasicDrawer;
 import com.jaquadro.minecraft.storagedrawers.config.ConfigManager;
 import com.jaquadro.minecraft.storagedrawers.item.EnumUpgradeStorage;
 
 import gregtech.api.GTValues;
 import gregtech.api.GregTechAPI;
 import gregtech.api.unification.material.Material;
+import gregtech.api.unification.material.properties.PropertyKey;
 
 import com.github.gtexpert.gtmt.api.util.ModLog;
 import com.github.gtexpert.gtmt.integration.storagedrawers.storageupgrades.UpgradeMaterialData;
@@ -24,8 +24,6 @@ public class StorageDrawersUtil {
     private static final ConfigManager config = StorageDrawers.config;
 
     public static List<UpgradeMaterialData> UPGRADE_MATERIALS = new ArrayList<>();
-    private static final int MAX_MULTIPLIER = (Integer.MAX_VALUE /
-            (config.getBlockBaseStorage(EnumBasicDrawer.FULL1.getUnlocalizedName()) * 64)) / 7;
 
     public static List<UpgradeMaterialData> parse(String[] entries) {
         Map<Integer, UpgradeMaterialData> check = new HashMap<>();
@@ -41,7 +39,7 @@ public class StorageDrawersUtil {
                 "gregtech:emerald@" + config.getStorageUpgradeMultiplier(EnumUpgradeStorage.EMERALD.getLevel())
         };
 
-        String[] newEntries = prepend(defaultEntries, entries);
+        String[] newEntries = prepend(entries, defaultEntries);
 
         for (String entry : newEntries) {
             String[] split1 = entry.split("@", 2);
@@ -65,6 +63,11 @@ public class StorageDrawersUtil {
                 continue;
             }
 
+            if (!material.hasProperty(PropertyKey.DUST)) {
+                ModLog.logger.warn("Material must have dust property. Skipping entry.");
+                continue;
+            }
+
             int id = material.getId();
 
             String[] percentSplit = otherPart.split("%", 2);
@@ -75,12 +78,6 @@ public class StorageDrawersUtil {
             } catch (NumberFormatException e) {
                 ModLog.logger.warn("Invalid multiplier: {}. Skipping entry.", entry, e);
                 continue;
-            }
-
-            if (multiplier < 1 || MAX_MULTIPLIER < multiplier) {
-                int val = multiplier;
-                multiplier = MathHelper.clamp(val, 1, MAX_MULTIPLIER);
-                ModLog.logger.warn("Multiplier is out of range. Fallback to {}", multiplier);
             }
 
             int tier = -1;
@@ -101,7 +98,9 @@ public class StorageDrawersUtil {
             }
             if (check.containsKey(id)) {
                 ModLog.logger.warn("Duplicate id: {}. Skipping entry.", id);
+                continue;
             }
+
             UpgradeMaterialData data = new UpgradeMaterialData(material, id, multiplier, tier);
             check.put(id, data);
             result.add(data);
