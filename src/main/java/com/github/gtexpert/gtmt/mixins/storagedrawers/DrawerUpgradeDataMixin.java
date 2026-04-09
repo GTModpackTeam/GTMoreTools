@@ -57,7 +57,6 @@ public abstract class DrawerUpgradeDataMixin extends UpgradeData {
         return true;
     }
 
-
     @Unique
     private int gtmt$getCustomMultiplier(ItemStack stack) {
         if (stack == null || stack.isEmpty()) {
