@@ -15,7 +15,7 @@ public class StorageDrawersConfigHolder {
     public static boolean removeOriginal = true;
 
     @Config.Comment({ "Specifies the materials that can be used to craft Storage Upgrades.",
-            "Format: modId:materialName@multiplier$tier",
+            "Format: modId:materialName@multiplier%tier",
             "==Notes==",
             "--Material--",
             "Material must have dust property",
