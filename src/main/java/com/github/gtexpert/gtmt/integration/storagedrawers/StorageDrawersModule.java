@@ -8,7 +8,6 @@ import java.util.List;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.crafting.IRecipe;
-import net.minecraftforge.client.event.ColorHandlerEvent;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -21,11 +20,15 @@ import net.minecraftforge.registries.IForgeRegistry;
 
 import org.jetbrains.annotations.NotNull;
 
+import gregtech.api.unification.material.event.PostMaterialEvent;
+
 import com.github.gtexpert.gtmt.api.ModValues;
 import com.github.gtexpert.gtmt.api.modules.TModule;
+import com.github.gtexpert.gtmt.api.unification.material.info.GTMTMaterialFlags;
 import com.github.gtexpert.gtmt.integration.IntegrationSubmodule;
 import com.github.gtexpert.gtmt.integration.storagedrawers.items.ItemGTMaterialUpgradeStorage;
 import com.github.gtexpert.gtmt.integration.storagedrawers.items.StorageDrawersItems;
+import com.github.gtexpert.gtmt.integration.storagedrawers.recipes.UpgradesLoader;
 import com.github.gtexpert.gtmt.integration.storagedrawers.storageupgrades.StorageUpgradeColors;
 import com.github.gtexpert.gtmt.integration.storagedrawers.storageupgrades.UpgradeMaterialData;
 import com.github.gtexpert.gtmt.integration.storagedrawers.storageupgrades.UpgradesMaterialRegistry;
@@ -56,13 +59,7 @@ public class StorageDrawersModule extends IntegrationSubmodule {
     }
 
     @Override
-    public void postInit(FMLPostInitializationEvent event) {
-        StorageDrawersUtil.UPGRADE_MATERIALS = StorageDrawersUtil.parse(StorageDrawersConfigHolder.upgradeMaterials);
-        for (UpgradeMaterialData data : StorageDrawersUtil.UPGRADE_MATERIALS) {
-            UpgradesMaterialRegistry.REGISTRY.put(data.getMaterial(), data.getId(), data.getMultiple(),
-                    data.getTier());
-        }
-    }
+    public void postInit(FMLPostInitializationEvent event) {}
 
     @SubscribeEvent
     public static void onRegisterItems(RegistryEvent.Register<Item> event) {
@@ -77,15 +74,24 @@ public class StorageDrawersModule extends IntegrationSubmodule {
     }
 
     @SubscribeEvent
-    @SideOnly(Side.CLIENT)
-    public static void onRegisterColors(ColorHandlerEvent.Item event) {}
+    public static void registerMaterialFlags(PostMaterialEvent event) {
+        GTMTMaterialFlags.integrationStorageDrawers();
+    }
 
     @Override
     public void registerBlocks(RegistryEvent.Register<Block> event) {}
 
     @Override
-    public void registerRecipesNormal(RegistryEvent.Register<IRecipe> event) {}
+    public void registerRecipesNormal(RegistryEvent.Register<IRecipe> event) {
+        StorageDrawersUtil.UPGRADE_MATERIALS = StorageDrawersUtil.parse(StorageDrawersConfigHolder.upgradeMaterials);
+        for (UpgradeMaterialData data : StorageDrawersUtil.UPGRADE_MATERIALS) {
+            UpgradesMaterialRegistry.REGISTRY.put(data.getMaterial(), data.getId(), data.getMultiple(),
+                    data.getTier());
+        }
+    }
 
     @Override
-    public void registerRecipesLowest(RegistryEvent.Register<IRecipe> event) {}
+    public void registerRecipesLowest(RegistryEvent.Register<IRecipe> event) {
+        UpgradesLoader.upgradeStorage();
+    }
 }
