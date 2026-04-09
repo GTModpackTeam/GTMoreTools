@@ -25,6 +25,7 @@ import gregtech.api.unification.material.event.PostMaterialEvent;
 import com.github.gtexpert.gtmt.api.ModValues;
 import com.github.gtexpert.gtmt.api.modules.TModule;
 import com.github.gtexpert.gtmt.api.unification.material.info.GTMTMaterialFlags;
+import com.github.gtexpert.gtmt.api.util.Mods;
 import com.github.gtexpert.gtmt.integration.IntegrationSubmodule;
 import com.github.gtexpert.gtmt.integration.storagedrawers.items.ItemGTMaterialUpgradeStorage;
 import com.github.gtexpert.gtmt.integration.storagedrawers.items.StorageDrawersItems;
@@ -37,6 +38,7 @@ import com.github.gtexpert.gtmt.modules.Modules;
 @TModule(
          moduleID = Modules.MODULE_DRAWERS,
          containerID = ModValues.MODID,
+         modDependencies = Mods.Names.STORAGE_DRAWERS,
          name = "GTMoreTool Storage Drawers Integration",
          description = "Storage Drawers Module")
 public class StorageDrawersModule extends IntegrationSubmodule {
