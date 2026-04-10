@@ -26,10 +26,13 @@ import slimeknights.tconstruct.library.utils.ToolHelper;
 @Mixin(value = ForgeHooks.class, remap = false)
 public class MixinForgeHooks {
 
-    @Inject(method = "canHarvestBlock", at = @At("RETURN"), cancellable = true)
+    @Inject(method = "canHarvestBlock(Lnet/minecraft/block/Block;Lnet/minecraft/entity/player/EntityPlayer;Lnet/minecraft/world/IBlockAccess;Lnet/minecraft/util/math/BlockPos;)Z",
+            at = @At("RETURN"),
+            cancellable = true)
     private static void checkOffHandTool(Block block, EntityPlayer player, IBlockAccess world,
                                          BlockPos pos, CallbackInfoReturnable<Boolean> cir) {
         if (Boolean.TRUE.equals(cir.getReturnValue())) return;
+        if (pos == null) return;
 
         ItemStack mainhand = player.getHeldItemMainhand();
         ItemStack offhand = player.getHeldItemOffhand();
