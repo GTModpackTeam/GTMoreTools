@@ -39,7 +39,7 @@ import com.github.gtexpert.gtmt.modules.Modules;
          moduleID = Modules.MODULE_DRAWERS,
          containerID = ModValues.MODID,
          modDependencies = Mods.Names.STORAGE_DRAWERS,
-         name = "GTMoreTool Storage Drawers Integration",
+         name = "GTMoreTools Storage Drawers Integration",
          description = "Storage Drawers Module")
 public class StorageDrawersModule extends IntegrationSubmodule {
 

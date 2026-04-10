@@ -8,7 +8,7 @@ The table below shows current coverage:
 | Tinkers' Construct     | `integration.tic.api`            | Available                     |
 | Better Builder's Wands | —                                | No API yet                    |
 | Chisel                 | —                                | No API yet                    |
-| Sorage Drawers         | `integration.storagedrawers.api` | Available, but for mixin only |
+| Storage Drawers        | `integration.storagedrawers.api` | Available, but for mixin only |
 
 All registration calls must happen during your mod's `preInit` phase,
 **before** GTMT's `registerBlocks`, unless stated otherwise.

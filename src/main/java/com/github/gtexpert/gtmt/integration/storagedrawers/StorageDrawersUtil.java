@@ -90,7 +90,7 @@ public class StorageDrawersUtil {
                     continue;
                 }
 
-                if (value < 0 || 8 < value) {
+                if (value < 1 || 8 < value) {
                     tier = MathHelper.clamp(value, 1, 8);
                     ModLog.logger.warn("Tier is out of range. Fallback to {}", tier);
                 } else

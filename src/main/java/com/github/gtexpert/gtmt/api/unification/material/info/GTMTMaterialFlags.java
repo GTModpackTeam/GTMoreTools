@@ -45,6 +45,7 @@ public class GTMTMaterialFlags {
 
             if (!material.hasProperty(PropertyKey.DUST)) {
                 ModLog.logger.warn("Material must have dust property. Skipping entry.");
+                continue;
             }
             materials.add(material);
         }

@@ -80,7 +80,7 @@ public class ItemGTMaterialUpgradeStorage extends ItemUpgrade implements IGTMate
             return super.getItemStackDisplayName(stack);
         }
 
-        String materialName = getMaterial(stack).getUnlocalizedName();
+        String materialName = data.getMaterial().getUnlocalizedName();
         return I18n.format("gtmt.item.upgrade_storage.name", I18n.format(materialName));
     }
 
