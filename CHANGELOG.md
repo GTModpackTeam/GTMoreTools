@@ -1,3 +1,9 @@
+# v1.2.4
+## Tinkers' Construct Integration
+- Fixed GT main-hand + TiC off-hand combination dropping items twice
+
+* * *
+
 # v1.2.3
 ## Tinkers' Construct Integration
 - GT tool in main-hand + TiC tool in off-hand (and vice versa) now mines blocks using the off-hand tool

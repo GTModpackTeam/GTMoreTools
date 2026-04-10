@@ -19,20 +19,20 @@ import slimeknights.tconstruct.library.tools.TinkerToolCore;
 import slimeknights.tconstruct.library.utils.ToolHelper;
 
 /**
- * Allows GT main-hand + TiC off-hand to pass the harvest check.
- * NOTE: ForgeHooks is loaded before MixinBooter's late phase, so this Mixin
- * may not apply in all environments. {@link MixinItemGTTool} is the primary fix.
+ * Allows GT main-hand + TiC off-hand to pass {@code ForgeHooks.canHarvestBlock}.
+ * ForgeHooks loads before MixinBooter's late phase, so this Mixin may not apply
+ * in all environments; {@link MixinItemGTTool} is the primary coverage.
  */
 @Mixin(value = ForgeHooks.class, remap = false)
 public class MixinForgeHooks {
 
-    @Inject(
-            method = "canHarvestBlock(Lnet/minecraft/block/Block;Lnet/minecraft/entity/player/EntityPlayer;Lnet/minecraft/world/IBlockAccess;Lnet/minecraft/util/math/BlockPos;)Z",
+    @Inject(method = "canHarvestBlock(Lnet/minecraft/block/Block;Lnet/minecraft/entity/player/EntityPlayer;Lnet/minecraft/world/IBlockAccess;Lnet/minecraft/util/math/BlockPos;)Z",
             at = @At("RETURN"),
             cancellable = true)
     private static void checkOffHandTool(Block block, EntityPlayer player, IBlockAccess world,
                                          BlockPos pos, CallbackInfoReturnable<Boolean> cir) {
         if (Boolean.TRUE.equals(cir.getReturnValue())) return;
+        if (pos == null) return;
 
         ItemStack mainhand = player.getHeldItemMainhand();
         ItemStack offhand = player.getHeldItemOffhand();
