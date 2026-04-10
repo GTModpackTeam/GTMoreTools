@@ -29,7 +29,7 @@ public class StorageDrawersUtil {
         Map<Integer, UpgradeMaterialData> check = new HashMap<>();
         List<UpgradeMaterialData> result = new ArrayList<>();
 
-        ModLog.logger.info("UpgradeMaterialData Registering was started.");
+        ModLog.logger.info("UpgradeMaterialData registration started.");
 
         String[] defaultEntries = new String[] {
                 "gregtech:obsidian@" + config.getStorageUpgradeMultiplier(EnumUpgradeStorage.OBSIDIAN.getLevel()),
@@ -106,16 +106,16 @@ public class StorageDrawersUtil {
             result.add(data);
             if (tier == -1) {
                 ModLog.logger.info(
-                        "Success to add UpgradeMaterialRegistry, Material: {}, meta: {}, multiplier: x{}",
+                        "Registered UpgradeMaterial (Material: {}, meta: {}, multiplier: x{})",
                         material, id, multiplier);
             } else {
                 ModLog.logger.info(
-                        "Success to add UpgradeMaterialRegistry, Material: {}, meta: {}, multiplier: x{}, requiredTier: {} ({})",
+                        "Registered UpgradeMaterial (Material: {}, meta: {}, multiplier: x{}, requiredTier: {} ({}))",
                         material, id, multiplier, tier, GTValues.VN[tier]);
 
             }
         }
-        ModLog.logger.info("UpgradeMaterialData Registering was finished.");
+        ModLog.logger.info("UpgradeMaterialData registration finished.");
         return result;
     }
 
