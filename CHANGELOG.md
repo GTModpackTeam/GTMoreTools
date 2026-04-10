@@ -1,3 +1,11 @@
+# v1.3.0
+## New: Storage Drawers Integration
+- GT materials can now be used to craft _Storage Upgrades_.
+- Craftable materials, multipliers, and related settings can be configured via cfg.
+- Original materials (Obsidian/Iron/Gold/Diamond/Emerald) are always included.
+
+* * *
+
 # v1.2.3
 ## Tinkers' Construct Integration
 - GT tool in main-hand + TiC tool in off-hand (and vice versa) now mines blocks using the off-hand tool

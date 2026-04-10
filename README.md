@@ -40,6 +40,9 @@ This mod is an add-on for GregTech CEu that provides integration with various mo
 - GT material fluids can be melted in the TiC Smeltery (ingot, nugget, dust, gem, and optionally ore variants). Raw ore doubling is disabled by default to preserve GT ore-processing progression (configurable)
 
 
+### Storage Drawers Integration
+- Add GT material-based Storage Upgrades.
+
 ## For Addon Developers
 
 GTMoreTools exposes a public API for extending the Tinkers' Construct integration.

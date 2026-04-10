@@ -3,11 +3,12 @@
 GTMoreTools exposes addon APIs for its mod integrations.
 The table below shows current coverage:
 
-| Integration | API package | Status |
-|---|---|---|
-| Tinkers' Construct | `integration.tic.api` | Available |
-| Better Builder's Wands | — | No API yet |
-| Chisel | — | No API yet |
+| Integration            | API package                      | Status                        |
+|------------------------|----------------------------------|-------------------------------|
+| Tinkers' Construct     | `integration.tic.api`            | Available                     |
+| Better Builder's Wands | —                                | No API yet                    |
+| Chisel                 | —                                | No API yet                    |
+| Sorage Drawers         | `integration.storagedrawers.api` | Available, but for mixin only |
 
 All registration calls must happen during your mod's `preInit` phase,
 **before** GTMT's `registerBlocks`, unless stated otherwise.
@@ -160,3 +161,66 @@ Parallel count scales as `4^(tier − EV) / 2` from EV upward.
 ### Bookshelf variants (Assembler)
 
 6 wood types × 1 recipe each: 6 planks + 3 Books → carved Bookshelf (100 EU, ULV).
+
+---
+
+## Storage Drawers Integration
+An addon API currently exists, but it is mixin-based and not usable. The following describes the internal logic for reference.
+
+### What is added
+
+- Storage Upgrades made from GT materials will be registered for the GT materials specified in the cfg.
+
+### Config Options
+
+`removeOriginal`
+- Controls whether the default Storage Upgrade recipes are removed.
+    - true: All original Storage Upgrade recipes are removed. Only recipes defined by this mod (via upgradeMaterials) will be available.
+    - false: Original recipes remain alongside the newly added ones.
+- Use this if you want to fully replace the default progression with GT-based materials.
+
+`upgradeMaterials`
+- Defines custom materials used to craft Storage Upgrades.
+- Each entry adds a new Storage Upgrade variant based on a GT material.
+
+#### _Format_
+`modId:materialName@multiplier%tier`
+
+#### _Parameters_
+- `materialName`: Must be a valid GT material with a dust property.
+- `multiplier`: Determines the storage capacity multiplier of the upgrade. 
+  - Range: 1 to 2147483647
+  - Not affected by the StorageDrawers config.
+- `tier` (optional): Required Field Generator tier. 
+  - Range: 1 (LV) to 8 (UV)
+  - If omitted, defaults to -1 (no Field Generator required). 
+  
+#### _Behavior_
+- A Storage Upgrade using the specified material will be registered for each entry. 
+- If the config is empty, only the original materials are available. 
+- Original materials (Obsidian / Iron / Gold / Diamond / Emerald):
+  - Always included automatically.
+  - Use tier -1.
+  - Their multipliers are controlled by the StorageDrawers config.
+  - **Do NOT define them here.**
+  
+#### _Example_
+`gregtech:steel@4%2`
+- Adds a Steel Storage Upgrade 
+  - Multiplier: x4 
+  - Requires MV-tier Field Generator
+
+### Crafting
+
+```
+P S P
+S U S
+P X P
+```
+
+- **P** = `plate`
+- **S** = `screw`
+- **U** = Upgrade Template
+- **X** = If _tier_ is -1, a `stickLong`; otherwise, a `Field Generator` of the specified tier
+
+- _Storage Upgrade_ conversion recipes between StorageDrawers and GTMoreTools are always added for Obsidian / Iron / Gold / Diamond / Emerald.
