@@ -209,6 +209,13 @@ An addon API currently exists, but it is mixin-based and not usable. The followi
 - Adds a Steel Storage Upgrade 
   - Multiplier: x4 
   - Requires MV-tier Field Generator
+  
+#### _Logging_
+- Registration results can be checked in the log. 
+- The process starts with `[GT More Tools]: UpgradeMaterialData registration started.` and ends with `[GT More Tools]: UpgradeMaterialData registration finished.`
+- On successful registration, the following message is logged: `[GT More Tools]: Registered UpgradeMaterial (Material=..., meta=..., multiplier=x..., requiredTier=...)`
+  - For example, a successful registration will produce a log like: `[GT More Tools]: Registered UpgradeMaterial (Material=steel, meta=324, multiplier=x4, requiredTier=2 (MV))`
+- Entries with an invalid format will be skipped, and the log will indicate the issue.
 
 ### Crafting
 
