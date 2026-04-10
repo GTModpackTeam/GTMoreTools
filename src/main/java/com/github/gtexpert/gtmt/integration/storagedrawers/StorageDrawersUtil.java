@@ -106,11 +106,11 @@ public class StorageDrawersUtil {
             result.add(data);
             if (tier == -1) {
                 ModLog.logger.info(
-                        "Registered UpgradeMaterial (Material: {}, meta: {}, multiplier: x{})",
+                        "Registered UpgradeMaterial (Material={}, meta={}, multiplier=x{})",
                         material, id, multiplier);
             } else {
                 ModLog.logger.info(
-                        "Registered UpgradeMaterial (Material: {}, meta: {}, multiplier: x{}, requiredTier: {} ({}))",
+                        "Registered UpgradeMaterial (Material={}, meta={}, multiplier=x{}, requiredTier={} ({}))",
                         material, id, multiplier, tier, GTValues.VN[tier]);
 
             }
