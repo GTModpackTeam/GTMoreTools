@@ -21,23 +21,12 @@ This mod is an add-on for GregTech CEu that provides integration with various mo
 - Adds GT material-based Wand tools
 
 ### Tinkers' Construct Integration
-- CEu tool materials are automatically registered as Tinkers' Construct materials
-- Supports Head, Handle, Extra, Bow, and Arrow Shaft stats derived from GT material properties
-- Material names are inherited from CEu's localization
-- Molten fluid and smeltery casting/melting support for CEu materials with fluid properties
-- GT bolt items are registered as TiC part items for Arrow Shaft crafting
-- Traits are automatically assigned from GT material properties (no hardcoded material lists):
-  - **Holy** (TiC built-in) - Silver-bearing alloys deal bonus damage to undead
-  - **Heat Resistant** - Materials processed at blast temp ≥ 2500 K gain +30% mining speed in the Nether
-  - **Cryogenic** - Vacuum-freezer processed materials (blast temp 1750–2499 K) apply Slowness on hit
-  - **Anti-Corrosion** - High-durability alloys (≥ 2000) have 15% chance to negate durability loss
-  - **Heavy Blow** - High-attack materials (≥ 10 dmg) deal increased knockback
-  - **Magnetic** (TiC built-in) - Mirrors GT's isMagnetic flag; mined items go directly into inventory
-  - **Unbreakable** - Mirrors GT's isUnbreakable flag; tool never loses durability
-- GT ToolProperty enchantments (e.g. Fortune, Looting) are automatically applied to TiC parts as traits
-- Harvest levels beyond Cobalt are registered dynamically for GT materials with harvest level 5+
-- If a GT material shares a name with an existing TiC material (e.g. Flint, Diamond), stats are merged by taking the better value per stat rather than skipping the material
-- GT material fluids can be melted in the TiC Smeltery (ingot, nugget, dust, gem, and optionally ore variants). Raw ore doubling is disabled by default to preserve GT ore-processing progression (configurable)
+- CEu tool materials are automatically registered as TiC materials (Head, Handle, Extra, Bow, Arrow Shaft)
+- Traits are automatically assigned from GT material properties (Holy, Heat Resistant, Cryogenic, Anti-Corrosion, etc.)
+- Molten fluid and smeltery casting/melting support for CEu materials
+- Dual-tool mining with GT tool + TiC tool cross-hand combinations
+
+For full details, see [CHANGELOG.md](CHANGELOG.md).
 
 
 ### Storage Drawers Integration

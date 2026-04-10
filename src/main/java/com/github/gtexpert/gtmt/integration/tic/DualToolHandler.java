@@ -18,14 +18,14 @@ import slimeknights.tconstruct.library.tools.TinkerToolCore;
 import slimeknights.tconstruct.library.utils.ToolHelper;
 
 /**
- * Extends TiC's off-hand mining to work with GT tools.
+ * Extends TiC's off-hand mining to cover GT + TiC cross-hand combinations.
  *
  * <ul>
- * <li>GT main-hand + TiC off-hand: uses TiC dig speed and generates drops when GT cannot harvest.</li>
- * <li>TiC main-hand + GT off-hand: uses GT dig speed when TiC cannot harvest.</li>
+ * <li>GT main + TiC off: applies TiC dig speed and drop logic when GT cannot harvest.</li>
+ * <li>TiC main + GT off: applies GT dig speed when TiC cannot harvest.</li>
  * </ul>
  *
- * Runs at {@link EventPriority#LOW} so TiC's own {@code BreakSpeed} handler fires first.
+ * Registered at {@link EventPriority#LOW} so TiC's own {@code BreakSpeed} handler fires first.
  */
 public final class DualToolHandler {
 
@@ -46,6 +46,8 @@ public final class DualToolHandler {
                 float speed = ToolHelper.calcDigSpeed(offhand, state);
                 BlockPos pos = event.getPos();
                 if (pos == null || !ForgeHooks.canHarvestBlock(state.getBlock(), player, player.world, pos)) {
+                    // Block hardness is divided by 100 instead of 30 when canHarvestBlock
+                    // returns false; multiply to restore TiC's intended mining speed.
                     speed *= (100.0f / 30.0f);
                 }
                 event.setNewSpeed(speed);
@@ -66,10 +68,11 @@ public final class DualToolHandler {
 
     /**
      * Damages the off-hand tool after a block is broken via off-hand mining.
-     * For Case 1, also spawns drops using the off-hand TiC tool when
-     * {@code ForgeHooks.canHarvestBlock} returns {@code false} for the GT main-hand tool.
+     * Drops are handled by vanilla: {@code MixinEntityPlayer} makes
+     * {@code player.canHarvestBlock()} return {@code true} for GT+TiC combos,
+     * so {@code tryHarvestBlock} calls {@code harvestBlock} exactly once.
      *
-     * Runs at {@link EventPriority#LOWEST} so cancellations by other mods are resolved first.
+     * Registered at {@link EventPriority#LOWEST} so other mods' cancellations are resolved first.
      */
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public static void onBlockBreak(BlockEvent.BreakEvent event) {
@@ -87,10 +90,9 @@ public final class DualToolHandler {
 
         if (mainhand.getItem() instanceof IGTTool && offhand.getItem() instanceof TinkerToolCore) {
             if (!canHarvestForDrops(player, mainhand, state) && ToolHelper.canHarvest(offhand, state)) {
-                if (!ForgeHooks.canHarvestBlock(state.getBlock(), player, player.world, event.getPos())) {
-                    state.getBlock().harvestBlock(player.world, player, event.getPos(), state,
-                            player.world.getTileEntity(event.getPos()), offhand);
-                }
+                // Drops are provided by vanilla: MixinEntityPlayer makes player.canHarvestBlock()
+                // return true for this combo, so tryHarvestBlock's harvestBlock() call fires normally.
+                // Only damage the TiC off-hand tool for its contribution to the harvest.
                 offhand.getItem().onBlockDestroyed(offhand, player.world, state,
                         event.getPos(), player);
             }
@@ -111,7 +113,10 @@ public final class DualToolHandler {
         if (stack.isEmpty() || toolType == null) {
             return player.canHarvestBlock(state);
         }
-        int level = stack.getItem().getHarvestLevel(stack, toolType, player, state);
+        // Null player: bypasses MixinItemGTTool's off-hand elevation so the raw level of
+        // this specific tool is returned. The fallback only fires when the tool itself
+        // cannot harvest.
+        int level = stack.getItem().getHarvestLevel(stack, toolType, null, state);
         if (level < 0) return player.canHarvestBlock(state);
         return level >= block.getHarvestLevel(state);
     }

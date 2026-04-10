@@ -40,7 +40,7 @@ public class MixinDualToolHarvestUtils {
                 (tool.getItem() instanceof TinkerToolCore && offhand.getItem() instanceof IGTTool);
         if (!isCrossCombo) return;
 
-        if (!gtmt$canHarvest(tool, state, player) && gtmt$canHarvest(offhand, state, player)) {
+        if (gtmt$shouldPreferOffhand(tool, offhand, state)) {
             cir.setReturnValue(true);
         }
     }
@@ -61,23 +61,29 @@ public class MixinDualToolHarvestUtils {
                 (tool.getItem() instanceof TinkerToolCore && offhand.getItem() instanceof IGTTool);
         if (!isCrossCombo) return;
 
-        if (!gtmt$canHarvest(tool, state, player) && gtmt$canHarvest(offhand, state, player)) {
+        if (gtmt$shouldPreferOffhand(tool, offhand, state)) {
             cir.setReturnValue(true);
         }
     }
 
-    /**
-     * Always passes {@code null} for player to {@code getHarvestLevel} to get the raw level,
-     * bypassing both TiC's {@code shouldUseOffhand} recursion guard and GT's harvest-level
-     * elevation from {@link MixinItemGTTool}.
-     */
     @Unique
-    private static boolean gtmt$canHarvest(ItemStack stack, IBlockState state, EntityPlayer player) {
-        if (state.getMaterial().isToolNotRequired()) return true;
+    private static boolean gtmt$shouldPreferOffhand(ItemStack main, ItemStack offhand, IBlockState state) {
+        if (state.getMaterial().isToolNotRequired()) return false;
         Block block = state.getBlock();
         String toolType = block.getHarvestTool(state);
+        if (toolType == null) return false;
         int requiredLevel = block.getHarvestLevel(state);
-        if (toolType == null || requiredLevel < 0) return true;
-        return stack.getItem().getHarvestLevel(stack, toolType, null, state) >= requiredLevel;
+
+        int mainRaw = main.getItem().getHarvestLevel(main, toolType, null, state);
+        int offRaw = offhand.getItem().getHarvestLevel(offhand, toolType, null, state);
+
+        // Offhand can harvest, main cannot.
+        if (requiredLevel >= 0 && offRaw >= requiredLevel && mainRaw < requiredLevel) return true;
+
+        // Main is wrong type, offhand is correct type — prefer the appropriate tool
+        // even when neither can produce drops (mirrors TiC+TiC cross-type behaviour).
+        if (mainRaw < 0 && offRaw >= 0) return true;
+
+        return false;
     }
 }

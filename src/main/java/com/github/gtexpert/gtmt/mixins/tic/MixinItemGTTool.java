@@ -21,7 +21,6 @@ import slimeknights.tconstruct.library.tools.TinkerToolCore;
 
 /**
  * Replicates the hand-swap logic from {@code ToolCore.onBlockStartBreak} for GT tools.
- *
  */
 @Mixin(value = ItemGTTool.class, remap = false)
 public class MixinItemGTTool {
