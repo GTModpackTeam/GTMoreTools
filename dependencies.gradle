@@ -68,4 +68,13 @@ dependencies {
         runtimeOnly rfg.deobf("curse.maven:mantle-74924:2713386")
         runtimeOnly rfg.deobf("curse.maven:tinkers-antique-1242239:7339332")
     }
+
+    // Debug Storage Drawers: 1.12-5.5.3
+    compileOnly rfg.deobf("curse.maven:chameleon-230497:2450900") // Chameleon-1.12-4.1.3
+    compileOnly rfg.deobf("curse.maven:storage-drawers-223852:5981297")
+    if (project.debug_all.toBoolean() || project.debug_drawers.toBoolean()) {
+        runtimeOnly rfg.deobf("curse.maven:chameleon-230497:2450900") // Chameleon-1.12-4.1.3
+        runtimeOnly rfg.deobf("curse.maven:storage-drawers-223852:5981297")
+        implementation rfg.deobf("curse.maven:topalldependents-1120632:6138503")
+    }
 }

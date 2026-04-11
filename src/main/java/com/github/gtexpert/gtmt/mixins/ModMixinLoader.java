@@ -22,6 +22,7 @@ public class ModMixinLoader implements ILateMixinLoader {
             .put(Mods.Names.BETTER_BUILDERS_WANDS, true)
             .put(Mods.Names.CHISEL, true)
             .put(Mods.Names.TINKERS_CONSTRUCT, true)
+            .put(Mods.Names.STORAGE_DRAWERS, true)
             .build();
 
     @SuppressWarnings("SimplifyStreamApiCallChains")

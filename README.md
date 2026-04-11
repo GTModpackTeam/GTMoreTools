@@ -29,6 +29,9 @@ This mod is an add-on for GregTech CEu that provides integration with various mo
 For full details, see [CHANGELOG.md](CHANGELOG.md).
 
 
+### Storage Drawers Integration
+- Add GT material-based Storage Upgrades.
+
 ## For Addon Developers
 
 GTMoreTools exposes a public API for extending the Tinkers' Construct integration.
