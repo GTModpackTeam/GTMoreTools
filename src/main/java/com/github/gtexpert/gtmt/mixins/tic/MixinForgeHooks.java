@@ -19,9 +19,8 @@ import slimeknights.tconstruct.library.tools.TinkerToolCore;
 import slimeknights.tconstruct.library.utils.ToolHelper;
 
 /**
- * Allows GT main-hand + TiC off-hand to pass {@code ForgeHooks.canHarvestBlock}.
- * ForgeHooks loads before MixinBooter's late phase, so this Mixin may not apply
- * in all environments; {@link MixinItemGTTool} is the primary coverage.
+ * Extends {@code ForgeHooks.canHarvestBlock} to pass when the TiC off-hand can harvest
+ * a block that the GT main-hand cannot.
  */
 @Mixin(value = ForgeHooks.class, remap = false)
 public class MixinForgeHooks {

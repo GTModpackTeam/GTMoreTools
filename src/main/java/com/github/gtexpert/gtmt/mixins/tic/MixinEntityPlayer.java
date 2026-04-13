@@ -15,9 +15,8 @@ import slimeknights.tconstruct.library.tools.TinkerToolCore;
 import slimeknights.tconstruct.library.utils.ToolHelper;
 
 /**
- * Extends {@code EntityPlayer.canHarvestBlock} to consider the TiC off-hand tool
- * when the GT main-hand tool's {@code getHarvestLevel} returns -1 (wrong tool type)
- * and {@code ForgeHooks.canHarvestBlock} falls back to this method.
+ * Extends {@code EntityPlayer.canHarvestBlock} to pass when the TiC off-hand can harvest
+ * a block that the GT main-hand cannot.
  */
 @Mixin(EntityPlayer.class)
 public abstract class MixinEntityPlayer {
