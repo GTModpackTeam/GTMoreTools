@@ -17,10 +17,18 @@ import gregtech.api.items.toolitem.IGTTool;
 
 import slimeknights.tconstruct.library.tools.DualToolHarvestUtils;
 import slimeknights.tconstruct.library.tools.TinkerToolCore;
+import slimeknights.tconstruct.library.utils.ToolHelper;
 
 /**
- * Extends TiC's {@code shouldUseOffhand} to recognise GT + TiC tool combinations
- * in both directions (GT main / TiC off, TiC main / GT off).
+ * Bridges GT tools into TiC's {@code shouldUseOffhand} system for cross-hand combinations.
+ *
+ * <ul>
+ * <li>GT main + TiC off: returns {@code true} when GT cannot harvest but TiC can, so that
+ * {@link MixinItemGTTool} performs the hand-swap and TiC mines as main-hand.</li>
+ * <li>TiC main + GT off: returns {@code true} when TiC cannot harvest but GT can, activating
+ * TiC's {@code offhandBreakSpeed}, {@code getHarvestLevel}, and {@code onBlockDestroyed}
+ * delegation.</li>
+ * </ul>
  */
 @Mixin(value = DualToolHarvestUtils.class, remap = false)
 public class MixinDualToolHarvestUtils {
@@ -36,12 +44,21 @@ public class MixinDualToolHarvestUtils {
         ItemStack offhand = player.getHeldItemOffhand();
         if (tool.isEmpty() || offhand.isEmpty() || state == null) return;
 
-        boolean isCrossCombo = (tool.getItem() instanceof IGTTool && offhand.getItem() instanceof TinkerToolCore) ||
-                (tool.getItem() instanceof TinkerToolCore && offhand.getItem() instanceof IGTTool);
-        if (!isCrossCombo) return;
+        if (tool.getItem() instanceof TinkerToolCore && offhand.getItem() instanceof IGTTool) {
+            if (state.getMaterial().isToolNotRequired()) {
+                float gtSpeed = offhand.getItem().getDestroySpeed(offhand, state);
+                float ticSpeed = ToolHelper.calcDigSpeed(tool, state);
+                if (gtSpeed > ticSpeed) cir.setReturnValue(true);
+            } else if (!ToolHelper.canHarvest(tool, state) && gtmt$gtCanHarvest(offhand, state)) {
+                cir.setReturnValue(true);
+            }
+            return;
+        }
 
-        if (gtmt$shouldPreferOffhand(tool, offhand, state)) {
-            cir.setReturnValue(true);
+        if (tool.getItem() instanceof IGTTool && offhand.getItem() instanceof TinkerToolCore) {
+            if (gtmt$shouldPreferOffhand(tool, offhand, state)) {
+                cir.setReturnValue(true);
+            }
         }
     }
 
@@ -57,18 +74,39 @@ public class MixinDualToolHarvestUtils {
         ItemStack offhand = player.getHeldItemOffhand();
         if (tool.isEmpty() || offhand.isEmpty() || state == null) return;
 
-        boolean isCrossCombo = (tool.getItem() instanceof IGTTool && offhand.getItem() instanceof TinkerToolCore) ||
-                (tool.getItem() instanceof TinkerToolCore && offhand.getItem() instanceof IGTTool);
-        if (!isCrossCombo) return;
+        if (tool.getItem() instanceof TinkerToolCore && offhand.getItem() instanceof IGTTool) {
+            if (state.getMaterial().isToolNotRequired()) {
+                float gtSpeed = offhand.getItem().getDestroySpeed(offhand, state);
+                float ticSpeed = ToolHelper.calcDigSpeed(tool, state);
+                if (gtSpeed > ticSpeed) cir.setReturnValue(true);
+            } else if (!ToolHelper.canHarvest(tool, state) && gtmt$gtCanHarvest(offhand, state)) {
+                cir.setReturnValue(true);
+            }
+            return;
+        }
 
-        if (gtmt$shouldPreferOffhand(tool, offhand, state)) {
-            cir.setReturnValue(true);
+        if (tool.getItem() instanceof IGTTool && offhand.getItem() instanceof TinkerToolCore) {
+            if (gtmt$shouldPreferOffhand(tool, offhand, state)) {
+                cir.setReturnValue(true);
+            }
         }
     }
 
     @Unique
-    private static boolean gtmt$shouldPreferOffhand(ItemStack main, ItemStack offhand, IBlockState state) {
+    private static boolean gtmt$gtCanHarvest(ItemStack gt, IBlockState state) {
         if (state.getMaterial().isToolNotRequired()) return false;
+        Block block = state.getBlock();
+        String toolType = block.getHarvestTool(state);
+        if (toolType == null) return false;
+        int level = gt.getItem().getHarvestLevel(gt, toolType, null, state);
+        return level >= 0 && level >= block.getHarvestLevel(state);
+    }
+
+    @Unique
+    private static boolean gtmt$shouldPreferOffhand(ItemStack main, ItemStack offhand, IBlockState state) {
+        if (state.getMaterial().isToolNotRequired()) {
+            return offhand.getItem().getDestroySpeed(offhand, state) > main.getItem().getDestroySpeed(main, state);
+        }
         Block block = state.getBlock();
         String toolType = block.getHarvestTool(state);
         if (toolType == null) return false;
@@ -77,11 +115,7 @@ public class MixinDualToolHarvestUtils {
         int mainRaw = main.getItem().getHarvestLevel(main, toolType, null, state);
         int offRaw = offhand.getItem().getHarvestLevel(offhand, toolType, null, state);
 
-        // Offhand can harvest, main cannot.
         if (requiredLevel >= 0 && offRaw >= requiredLevel && mainRaw < requiredLevel) return true;
-
-        // Main is wrong type, offhand is correct type — prefer the appropriate tool
-        // even when neither can produce drops (mirrors TiC+TiC cross-type behaviour).
         if (mainRaw < 0 && offRaw >= 0) return true;
 
         return false;

@@ -26,10 +26,9 @@ import slimeknights.tconstruct.library.smeltery.MeltingRecipe;
  */
 public final class TiCSmeltery {
 
-    // TiC fluid-amount constants (from slimeknights.tconstruct.library.materials.Material)
-    private static final int VALUE_Ingot = slimeknights.tconstruct.library.materials.Material.VALUE_Ingot;  // 144
-    private static final int VALUE_Nugget = slimeknights.tconstruct.library.materials.Material.VALUE_Nugget; // 16
-    private static final int VALUE_Block = slimeknights.tconstruct.library.materials.Material.VALUE_Block;  // 1296
+    private static final int VALUE_Ingot = slimeknights.tconstruct.library.materials.Material.VALUE_Ingot;
+    private static final int VALUE_Nugget = slimeknights.tconstruct.library.materials.Material.VALUE_Nugget;
+    private static final int VALUE_Block = slimeknights.tconstruct.library.materials.Material.VALUE_Block;
 
     private TiCSmeltery() {}
 

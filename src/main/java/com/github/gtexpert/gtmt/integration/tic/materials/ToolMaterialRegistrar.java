@@ -3,7 +3,9 @@ package com.github.gtexpert.gtmt.integration.tic.materials;
 import java.io.ByteArrayInputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import net.minecraft.block.Block;
 import net.minecraft.util.text.TextFormatting;
@@ -48,6 +50,12 @@ public final class ToolMaterialRegistrar {
 
     private static final List<MaterialIntegration> integrations = new ArrayList<>();
 
+    /**
+     * Cache of TiC lang key → GT Material, used to re-inject translations after a resource
+     * reload (F3+T or language change) clears the runtime LanguageMap entries.
+     */
+    private static final Map<String, Material> translationSources = new LinkedHashMap<>();
+
     private ToolMaterialRegistrar() {}
 
     /**
@@ -82,10 +90,6 @@ public final class ToolMaterialRegistrar {
             integration.registerFluidModel();
         }
     }
-
-    // -------------------------------------------------------------------------
-    // Merge path
-    // -------------------------------------------------------------------------
 
     /**
      * Enhance an already-registered TiC material with GT stats and traits.
@@ -167,10 +171,6 @@ public final class ToolMaterialRegistrar {
         MaterialTraitApplier.applyTraits(ticMaterial, gtMaterial, toolProp);
     }
 
-    // -------------------------------------------------------------------------
-    // Register path
-    // -------------------------------------------------------------------------
-
     private static void registerMaterial(Material gtMaterial, IForgeRegistry<Block> blockRegistry) {
         String identifier = ModValues.MODID + "." + gtMaterial.getName();
         ToolProperty toolProp = gtMaterial.getProperty(PropertyKey.TOOL);
@@ -231,10 +231,6 @@ public final class ToolMaterialRegistrar {
         integrations.add(integration);
     }
 
-    // -------------------------------------------------------------------------
-    // Helpers
-    // -------------------------------------------------------------------------
-
     private static void registerHarvestLevelNames() {
         // Override TiC's native names (0–4) with vanilla/GT naming convention
         // so that the same harvest level shows the same name in both GT and TiC tooltips.
@@ -254,7 +250,25 @@ public final class ToolMaterialRegistrar {
 
     static void injectTranslation(String ticIdentifier, Material gtMaterial) {
         String key = "material." + ticIdentifier + ".name";
-        String entry = key + "=" + gtMaterial.getLocalizedName() + "\n";
+        translationSources.put(key, gtMaterial);
+        doInject(key, gtMaterial.getLocalizedName());
+    }
+
+    /**
+     * Re-injects all cached material name translations into the runtime LanguageMap.
+     *
+     * <p>
+     * Must be called after every resource reload (e.g. F3+T or language change) because
+     * {@link LanguageMap#inject} entries are cleared when the language manager reloads.
+     * Calling {@link Material#getLocalizedName()} here (rather than caching the string)
+     * ensures the correct translation for the currently active language is used.
+     */
+    public static void reinjectTranslations() {
+        translationSources.forEach((key, mat) -> doInject(key, mat.getLocalizedName()));
+    }
+
+    private static void doInject(String key, String value) {
+        String entry = key + "=" + value + "\n";
         LanguageMap.inject(new ByteArrayInputStream(entry.getBytes(StandardCharsets.UTF_8)));
     }
 

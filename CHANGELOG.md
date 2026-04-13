@@ -1,3 +1,10 @@
+# v1.3.1
+## Tinkers' Construct Integration
+- Fixed TiC main-hand + GT off-hand combination not using the GT off-hand tool when it is the appropriate tool for the block
+- Fixed duplicate durability loss on both GT and TiC cross-hand combinations
+
+* * *
+
 # v1.3.0
 ## New: Storage Drawers Integration
 - GT materials can now be used to craft _Storage Upgrades_.
