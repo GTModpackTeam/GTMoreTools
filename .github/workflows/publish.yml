@@ -89,6 +89,7 @@ jobs:
           curseforge-dependencies: |
             mixin-booter(required)
             gregtech-ce-unofficial(required)
+            storage-drawers(recommended)
             chisel(recommended)
             better-builders-wands(recommended)
             tinkers-antique(recommended)
