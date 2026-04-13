@@ -1,15 +1,13 @@
 package com.github.gtexpert.gtmt.integration.tic;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import net.minecraft.block.Block;
-import net.minecraftforge.client.event.ModelRegistryEvent;
-import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.relauncher.FMLLaunchHandler;
 import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -32,7 +30,11 @@ public class TiCModule extends IntegrationSubmodule {
     @NotNull
     @Override
     public List<Class<?>> getEventBusSubscribers() {
-        return Arrays.asList(TiCModule.class, DualToolHandler.class);
+        List<Class<?>> subscribers = new ArrayList<>(Arrays.asList(TiCModule.class, DualToolHandler.class));
+        if (FMLLaunchHandler.side() == Side.CLIENT) {
+            subscribers.add(TiCClientEvents.class);
+        }
+        return subscribers;
     }
 
     @Override
@@ -40,26 +42,5 @@ public class TiCModule extends IntegrationSubmodule {
         ToolMaterialRegistrar.register(event.getRegistry());
         ElasticMaterialRegistrar.register(event.getRegistry());
         TiCSmeltery.register();
-    }
-
-    @SubscribeEvent
-    @SideOnly(Side.CLIENT)
-    public static void onRegisterModels(ModelRegistryEvent event) {
-        ToolMaterialRegistrar.registerFluidModels();
-    }
-
-    /**
-     * Re-inject dynamic material name translations after every resource reload.
-     *
-     * <p>
-     * {@link net.minecraft.util.text.translation.LanguageMap#inject} entries are wiped
-     * whenever the language manager reloads (F3+T or in-game language change).
-     * {@link TextureStitchEvent.Post} fires after the language map has already been
-     * refreshed from disk, so this is the correct point to restore the dynamic entries.
-     */
-    @SubscribeEvent
-    @SideOnly(Side.CLIENT)
-    public static void onTextureStitchPost(TextureStitchEvent.Post event) {
-        ToolMaterialRegistrar.reinjectTranslations();
     }
 }

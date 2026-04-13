@@ -45,7 +45,11 @@ public class MixinDualToolHarvestUtils {
         if (tool.isEmpty() || offhand.isEmpty() || state == null) return;
 
         if (tool.getItem() instanceof TinkerToolCore && offhand.getItem() instanceof IGTTool) {
-            if (!ToolHelper.canHarvest(tool, state) && gtmt$gtCanHarvest(offhand, state)) {
+            if (state.getMaterial().isToolNotRequired()) {
+                float gtSpeed = offhand.getItem().getDestroySpeed(offhand, state);
+                float ticSpeed = ToolHelper.calcDigSpeed(tool, state);
+                if (gtSpeed > ticSpeed) cir.setReturnValue(true);
+            } else if (!ToolHelper.canHarvest(tool, state) && gtmt$gtCanHarvest(offhand, state)) {
                 cir.setReturnValue(true);
             }
             return;
@@ -71,7 +75,11 @@ public class MixinDualToolHarvestUtils {
         if (tool.isEmpty() || offhand.isEmpty() || state == null) return;
 
         if (tool.getItem() instanceof TinkerToolCore && offhand.getItem() instanceof IGTTool) {
-            if (!ToolHelper.canHarvest(tool, state) && gtmt$gtCanHarvest(offhand, state)) {
+            if (state.getMaterial().isToolNotRequired()) {
+                float gtSpeed = offhand.getItem().getDestroySpeed(offhand, state);
+                float ticSpeed = ToolHelper.calcDigSpeed(tool, state);
+                if (gtSpeed > ticSpeed) cir.setReturnValue(true);
+            } else if (!ToolHelper.canHarvest(tool, state) && gtmt$gtCanHarvest(offhand, state)) {
                 cir.setReturnValue(true);
             }
             return;
@@ -96,7 +104,9 @@ public class MixinDualToolHarvestUtils {
 
     @Unique
     private static boolean gtmt$shouldPreferOffhand(ItemStack main, ItemStack offhand, IBlockState state) {
-        if (state.getMaterial().isToolNotRequired()) return false;
+        if (state.getMaterial().isToolNotRequired()) {
+            return offhand.getItem().getDestroySpeed(offhand, state) > main.getItem().getDestroySpeed(main, state);
+        }
         Block block = state.getBlock();
         String toolType = block.getHarvestTool(state);
         if (toolType == null) return false;
