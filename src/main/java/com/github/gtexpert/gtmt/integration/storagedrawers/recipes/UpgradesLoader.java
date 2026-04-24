@@ -66,7 +66,7 @@ public class UpgradesLoader {
                 addStorageUpgradeConvertRecipe(Mods.StorageDrawers.getItem("upgrade_storage", 1, 4), output, material);
             }
 
-            if (!material.hasProperty(PropertyKey.INGOT) || !material.hasProperty(PropertyKey.GEM)) {
+            if (!material.hasProperty(PropertyKey.INGOT) && !material.hasProperty(PropertyKey.GEM)) {
                 RecipeMaps.EXTRUDER_RECIPES.recipeBuilder()
                         .input(OrePrefix.dust, material)
                         .notConsumable(MetaItems.SHAPE_EXTRUDER_ROD_LONG)
