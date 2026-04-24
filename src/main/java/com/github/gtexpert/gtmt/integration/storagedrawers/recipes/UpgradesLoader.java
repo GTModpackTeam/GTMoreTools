@@ -6,8 +6,10 @@ import net.minecraft.item.ItemStack;
 
 import gregtech.api.items.metaitem.MetaItem;
 import gregtech.api.recipes.ModHandler;
+import gregtech.api.recipes.RecipeMaps;
 import gregtech.api.unification.material.Material;
 import gregtech.api.unification.material.Materials;
+import gregtech.api.unification.material.properties.PropertyKey;
 import gregtech.api.unification.ore.OrePrefix;
 import gregtech.api.unification.stack.UnificationEntry;
 import gregtech.common.items.MetaItems;
@@ -62,6 +64,16 @@ public class UpgradesLoader {
             }
             if (material == Materials.Emerald) {
                 addStorageUpgradeConvertRecipe(Mods.StorageDrawers.getItem("upgrade_storage", 1, 4), output, material);
+            }
+
+            if (!material.hasProperty(PropertyKey.INGOT) && !material.hasProperty(PropertyKey.GEM)) {
+                RecipeMaps.EXTRUDER_RECIPES.recipeBuilder()
+                        .input(OrePrefix.dust, material)
+                        .notConsumable(MetaItems.SHAPE_EXTRUDER_ROD_LONG)
+                        .output(OrePrefix.stickLong, material)
+                        .duration((int) Math.max(material.getMass(), 1L))
+                        .EUt(64)
+                        .buildAndRegister();
             }
         });
     }
