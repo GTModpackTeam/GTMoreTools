@@ -40,26 +40,7 @@ public class MixinDualToolHarvestUtils {
                                               ItemStack tool,
                                               CallbackInfoReturnable<Boolean> cir) {
         if (!(entity instanceof EntityPlayer)) return;
-        EntityPlayer player = (EntityPlayer) entity;
-        ItemStack offhand = player.getHeldItemOffhand();
-        if (tool.isEmpty() || offhand.isEmpty() || state == null) return;
-
-        if (tool.getItem() instanceof TinkerToolCore && offhand.getItem() instanceof IGTTool) {
-            if (state.getMaterial().isToolNotRequired()) {
-                float gtSpeed = offhand.getItem().getDestroySpeed(offhand, state);
-                float ticSpeed = ToolHelper.calcDigSpeed(tool, state);
-                if (gtSpeed > ticSpeed) cir.setReturnValue(true);
-            } else if (!ToolHelper.canHarvest(tool, state) && gtmt$gtCanHarvest(offhand, state)) {
-                cir.setReturnValue(true);
-            }
-            return;
-        }
-
-        if (tool.getItem() instanceof IGTTool && offhand.getItem() instanceof TinkerToolCore) {
-            if (gtmt$shouldPreferOffhand(tool, offhand, state)) {
-                cir.setReturnValue(true);
-            }
-        }
+        gtmt$applyOffhandLogic((EntityPlayer) entity, state, tool, cir);
     }
 
     @Inject(method = "shouldUseOffhand(Lnet/minecraft/entity/EntityLivingBase;Lnet/minecraft/util/math/BlockPos;Lnet/minecraft/item/ItemStack;)Z",
@@ -69,8 +50,14 @@ public class MixinDualToolHarvestUtils {
                                             ItemStack tool,
                                             CallbackInfoReturnable<Boolean> cir) {
         if (!(entity instanceof EntityPlayer)) return;
-        EntityPlayer player = (EntityPlayer) entity;
         IBlockState state = entity.getEntityWorld().getBlockState(pos);
+        gtmt$applyOffhandLogic((EntityPlayer) entity, state, tool, cir);
+    }
+
+    @Unique
+    private static void gtmt$applyOffhandLogic(EntityPlayer player, IBlockState state,
+                                               ItemStack tool,
+                                               CallbackInfoReturnable<Boolean> cir) {
         ItemStack offhand = player.getHeldItemOffhand();
         if (tool.isEmpty() || offhand.isEmpty() || state == null) return;
 
@@ -94,7 +81,6 @@ public class MixinDualToolHarvestUtils {
 
     @Unique
     private static boolean gtmt$gtCanHarvest(ItemStack gt, IBlockState state) {
-        if (state.getMaterial().isToolNotRequired()) return false;
         Block block = state.getBlock();
         String toolType = block.getHarvestTool(state);
         if (toolType == null) return false;

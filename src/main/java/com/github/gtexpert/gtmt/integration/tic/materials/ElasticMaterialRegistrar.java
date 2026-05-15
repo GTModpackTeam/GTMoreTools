@@ -16,6 +16,7 @@ import slimeknights.tconstruct.library.MaterialIntegration;
 import slimeknights.tconstruct.library.TinkerRegistry;
 import slimeknights.tconstruct.library.materials.BowStringMaterialStats;
 import slimeknights.tconstruct.library.materials.FletchingMaterialStats;
+import slimeknights.tconstruct.tools.TinkerTraits;
 
 /**
  * Registers GT polymer materials as TiC BowString and Fletching part materials.
@@ -69,6 +70,15 @@ public final class ElasticMaterialRegistrar {
         TinkerRegistry.addMaterialStats(ticMaterial,
                 new FletchingMaterialStats(fletchAcc, fletchMod));
 
+        if (stringMod >= 1.1f) {
+            ticMaterial.addTrait(TinkerTraits.momentum, "bowstring");
+        } else if (stringMod >= 1.05f) {
+            ticMaterial.addTrait(TinkerTraits.stiff, "bowstring");
+        }
+        if (fletchMod >= 1.05f) {
+            ticMaterial.addTrait(TinkerTraits.heavy, "fletching");
+        }
+
         // Register whichever GT item forms exist for this material
         String suffix = gtMaterial.toCamelCaseString();
         for (OrePrefix prefix : new OrePrefix[] { OrePrefix.plate, OrePrefix.foil, OrePrefix.ring }) {
@@ -82,6 +92,7 @@ public final class ElasticMaterialRegistrar {
         MaterialIntegration integration;
         if (fluid != null) {
             integration = new MaterialIntegration(ticMaterial, fluid, suffix);
+            ToolMaterialRegistrar.trackIntegratedFluid(fluid);
         } else {
             integration = new MaterialIntegration(ticMaterial);
             for (OrePrefix prefix : new OrePrefix[] { OrePrefix.plate, OrePrefix.foil }) {

@@ -43,4 +43,5 @@ public class TiCModule extends IntegrationSubmodule {
         ElasticMaterialRegistrar.register(event.getRegistry());
         TiCSmeltery.register();
     }
+
 }

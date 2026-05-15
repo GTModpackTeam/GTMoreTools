@@ -1,8 +1,16 @@
+# v1.3.3
+## Chisel Integration
+- Improved Auto Chisel processing speed.
+
+* * *
+
 # v1.3.2
+
 ## Storage Drawers Integration
 - Fixed `stickLong` recipe for materials without `Ingot` or `Gem`.
 
 * * *
+
 # v1.3.1
 ## Tinkers' Construct Integration
 - Fixed TiC main-hand + GT off-hand combination not using the GT off-hand tool when it is the appropriate tool for the block
