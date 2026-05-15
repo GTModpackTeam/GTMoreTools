@@ -141,9 +141,8 @@ public final class ToolMaterialRegistrar {
             public boolean accepts(ResourceLocation modelLocation) {
                 if (!(modelLocation instanceof ModelResourceLocation)) return false;
                 ModelResourceLocation mrl = (ModelResourceLocation) modelLocation;
-                return "tconstruct".equals(mrl.getNamespace())
-                        && "fluid_block".equals(mrl.getPath())
-                        && FluidRegistry.getFluid(mrl.getVariant()) != null;
+                return "tconstruct".equals(mrl.getNamespace()) && "fluid_block".equals(mrl.getPath()) &&
+                        FluidRegistry.getFluid(mrl.getVariant()) != null;
             }
 
             @Override
@@ -160,9 +159,9 @@ public final class ToolMaterialRegistrar {
      */
     @SideOnly(Side.CLIENT)
     public static void injectFluidItemModels(IRegistry<ModelResourceLocation, IBakedModel> registry) {
-        java.util.function.Function<ResourceLocation, TextureAtlasSprite> textureGetter =
-                loc -> net.minecraft.client.Minecraft.getMinecraft()
-                        .getTextureMapBlocks().getAtlasSprite(loc.toString());
+        java.util.function.Function<ResourceLocation, TextureAtlasSprite> textureGetter = loc -> net.minecraft.client.Minecraft
+                .getMinecraft()
+                .getTextureMapBlocks().getAtlasSprite(loc.toString());
         for (Map.Entry<ModelResourceLocation, Fluid> entry : fluidItemModels.entrySet()) {
             IBakedModel model = new ModelFluid(entry.getValue()).bake(
                     TRSRTransformation.identity(),
