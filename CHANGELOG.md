@@ -1,3 +1,9 @@
+# v1.4.0
+## New: Tools Module
+- Per-item tool restrictions (custom max durability), JEI hiding, and recipe removal — all configurable via a single cfg.
+
+* * *
+
 # v1.3.3
 ## Chisel Integration
 - Improved Auto Chisel processing speed.

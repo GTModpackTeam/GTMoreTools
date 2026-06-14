@@ -45,3 +45,6 @@ modifier.gtmt_moonlit.desc=§oThe night belongs to us§r\nMining speed +50% and 
 modifier.gtmt_unbreakable.name=Unbreakable
 modifier.gtmt_unbreakable.desc=§oEternal, Absolute§r\nThis tool will never break.
 gtmt.trait.ench.desc=§o%s§r\nApplies this enchantment permanently.
+
+# Tool Restriction
+gtmt.tool.restriction.tooltip=It can only be used for crafting materials.

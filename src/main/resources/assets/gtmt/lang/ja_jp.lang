@@ -45,3 +45,6 @@ modifier.gtmt_moonlit.desc=§o夜は我らのもの§r\n夜間に採掘速度+50
 modifier.gtmt_unbreakable.name=破壊不可
 modifier.gtmt_unbreakable.desc=§o永遠に、絶対に§r\nこのツールは耐久を消費しない。
 gtmt.trait.ench.desc=§o%s§r\nこのエンチャントを恒久的に付与する。
+
+# ツール耐久制限
+gtmt.tool.restriction.tooltip=クラフト材料にのみ使用できます。
