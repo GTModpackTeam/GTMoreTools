@@ -1,0 +1,22 @@
+{
+  "mcpServers": {
+    "mcp-gemini-cli": {
+      "command": "npx",
+      "args": ["mcp-gemini-cli", "--allow-npx"]
+    },
+    "serena": {
+      "command": "uvx",
+      "args": [
+        "--from",
+        "git+https://github.com/oraios/serena",
+        "serena",
+        "start-mcp-server",
+        "--context",
+        "claude-code",
+        "--project",
+        "/mnt/data/git/GTMoreTools"
+      ],
+      "env": {}
+    }
+  }
+}
