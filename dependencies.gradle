@@ -77,4 +77,12 @@ dependencies {
         runtimeOnly rfg.deobf("curse.maven:storage-drawers-223852:5981297")
         implementation rfg.deobf("curse.maven:topalldependents-1120632:6138503")
     }
+
+    // Debug Ex Nihilo: Creatio
+    compileOnly rfg.deobf("curse.maven:shadowfacts-forgelin-248453:2785465") // Shadowfacts' Forgelin-1.8.4
+    compileOnly rfg.deobf("curse.maven:ex-nihilo-creatio-274456:2817545") // Ex Nihilo: Creatio-1.12.2-0.4.7.2
+    if (project.debug_all.toBoolean() || project.debug_exnihilocreatio.toBoolean()) {
+        runtimeOnly rfg.deobf("curse.maven:shadowfacts-forgelin-248453:2785465")
+        runtimeOnly rfg.deobf("curse.maven:ex-nihilo-creatio-274456:2817545")
+    }
 }
