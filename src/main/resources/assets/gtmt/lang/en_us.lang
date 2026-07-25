@@ -4,6 +4,9 @@ gt.tool.class.chisel=Chisel
 item.gt.tool.wand.name=%s Wand
 gt.tool.class.wand=Wand
 
+item.gt.tool.crook.name=%s Crook
+gt.tool.class.crook=Crook
+
 item.upgrade_storage.name=Storage Upgrade
 gtmt.item.upgrade_storage.name=Storage Upgrade (%s)
 

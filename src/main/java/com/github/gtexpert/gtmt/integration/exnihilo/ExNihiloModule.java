@@ -14,13 +14,18 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.registries.IForgeRegistry;
 
 import org.jetbrains.annotations.NotNull;
+
+import gregtech.api.items.toolitem.IGTTool;
 
 import com.github.gtexpert.gtmt.api.ModValues;
 import com.github.gtexpert.gtmt.api.modules.TModule;
 import com.github.gtexpert.gtmt.api.util.Mods;
 import com.github.gtexpert.gtmt.integration.IntegrationModule;
+import com.github.gtexpert.gtmt.integration.exnihilo.recipes.ExNihiloToolRecipe;
+import com.github.gtexpert.gtmt.integration.exnihilo.tools.ExNihiloToolsItems;
 import com.github.gtexpert.gtmt.modules.Modules;
 
 @TModule(
@@ -38,21 +43,32 @@ public class ExNihiloModule extends IntegrationModule {
     }
 
     @Override
-    public void preInit(FMLPreInitializationEvent event) {}
+    public void preInit(FMLPreInitializationEvent event) {
+        ExNihiloToolsItems.init();
+    }
 
     @Override
     public void postInit(FMLPostInitializationEvent event) {}
 
     @SubscribeEvent
-    public static void onRegisterItems(RegistryEvent.Register<Item> event) {}
+    public static void onRegisterItems(RegistryEvent.Register<Item> event) {
+        IForgeRegistry<Item> registry = event.getRegistry();
+        for (IGTTool tool : ExNihiloToolsItems.getAllTools()) {
+            registry.register(tool.get());
+        }
+    }
 
     @SubscribeEvent
     @SideOnly(Side.CLIENT)
-    public static void onRegisterModels(ModelRegistryEvent event) {}
+    public static void onRegisterModels(ModelRegistryEvent event) {
+        ExNihiloToolsItems.registerModels();
+    }
 
     @SubscribeEvent
     @SideOnly(Side.CLIENT)
-    public static void onRegisterColors(ColorHandlerEvent.Item event) {}
+    public static void onRegisterColors(ColorHandlerEvent.Item event) {
+        ExNihiloToolsItems.registerColors(event.getItemColors());
+    }
 
     @Override
     public void registerBlocks(RegistryEvent.Register<Block> event) {}
@@ -61,5 +77,7 @@ public class ExNihiloModule extends IntegrationModule {
     public void registerRecipesNormal(RegistryEvent.Register<IRecipe> event) {}
 
     @Override
-    public void registerRecipesLowest(RegistryEvent.Register<IRecipe> event) {}
+    public void registerRecipesLowest(RegistryEvent.Register<IRecipe> event) {
+        ExNihiloToolRecipe.registerRecipes();
+    }
 }

@@ -4,6 +4,9 @@ gt.tool.class.chisel=チゼル
 item.gt.tool.wand.name=%sのワンド
 gt.tool.class.wand=ワンド
 
+item.gt.tool.crook.name=%sの鉤
+gt.tool.class.crook=鉤
+
 item.upgrade_storage.name=容量キット
 gtmt.item.upgrade_storage.name=容量キット (%s)
 
