@@ -1,6 +1,7 @@
 package com.github.gtexpert.gtmt.integration.exnihilo;
 
-import java.util.Collections;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import net.minecraft.block.Block;
@@ -23,7 +24,7 @@ import gregtech.api.items.toolitem.IGTTool;
 import com.github.gtexpert.gtmt.api.ModValues;
 import com.github.gtexpert.gtmt.api.modules.TModule;
 import com.github.gtexpert.gtmt.api.util.Mods;
-import com.github.gtexpert.gtmt.integration.IntegrationModule;
+import com.github.gtexpert.gtmt.integration.IntegrationSubmodule;
 import com.github.gtexpert.gtmt.integration.exnihilo.recipes.ExNihiloToolRecipe;
 import com.github.gtexpert.gtmt.integration.exnihilo.tools.ExNihiloToolsItems;
 import com.github.gtexpert.gtmt.modules.Modules;
@@ -34,12 +35,12 @@ import com.github.gtexpert.gtmt.modules.Modules;
          modDependencies = Mods.Names.EX_NIHOLO,
          name = "GTMoreTools Ex Nihilo Creatio Integration",
          description = "Ex Nihilo Creatio Module")
-public class ExNihiloModule extends IntegrationModule {
+public class ExNihiloModule extends IntegrationSubmodule {
 
     @NotNull
     @Override
     public List<Class<?>> getEventBusSubscribers() {
-        return Collections.singletonList(ExNihiloModule.class);
+        return new ArrayList<>(Arrays.asList(ExNihiloModule.class, ExNihiloEventHandlers.class));
     }
 
     @Override
@@ -79,5 +80,6 @@ public class ExNihiloModule extends IntegrationModule {
     @Override
     public void registerRecipesLowest(RegistryEvent.Register<IRecipe> event) {
         ExNihiloToolRecipe.registerRecipes();
+        ExNihiloUtil.init();
     }
 }
