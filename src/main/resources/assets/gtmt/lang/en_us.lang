@@ -15,6 +15,11 @@ item.gtPebble.black_granite.name=Black Granite Pebble
 item.gtPebble.marble.name=Marble Pebble
 item.gtPebble.red_granite.name=Red Granite Pebble
 
+item.material.oreprefix.oreChunk=%s Ore Chunk
+item.material.oreprefix.oreEnderChunk=Ender %s Ore Chunk
+item.material.oreprefix.oreNetherChunk=Nether %s Ore Chunk
+item.material.oreprefix.oreSandyChunk=Sandy %s Ore Chunk
+
 # singleblock
 # Auto Chisel
 gtmt.machine.auto_chisel.lv.name=Basic Auto Chisel

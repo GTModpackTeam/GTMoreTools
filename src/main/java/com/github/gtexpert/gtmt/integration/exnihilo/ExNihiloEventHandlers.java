@@ -8,8 +8,15 @@ import net.minecraftforge.event.world.BlockEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
+import org.jetbrains.annotations.NotNull;
+
 import gregtech.api.items.toolitem.IGTTool;
 import gregtech.api.items.toolitem.ToolClasses;
+import gregtech.api.unification.material.event.PostMaterialEvent;
+import gregtech.api.unification.ore.OrePrefix;
+import gregtech.common.items.MetaItems;
+
+import com.github.gtexpert.gtmt.api.unification.material.ore.GTMTOrePrefix;
 
 import exnihilocreatio.registries.manager.ExNihiloRegistryManager;
 
@@ -46,5 +53,16 @@ public class ExNihiloEventHandlers {
             event.setDropChance(1.0F);
             event.getDrops().addAll(rewards);
         }
+    }
+
+    // Material Event
+    @SubscribeEvent
+    public static void postRegisterMaterials(@NotNull PostMaterialEvent event) {
+        MetaItems.addOrePrefix(GTMTOrePrefix.oreChunk, GTMTOrePrefix.oreEnderChunk, GTMTOrePrefix.oreNetherChunk,
+                GTMTOrePrefix.oreSandyChunk);
+        GTMTOrePrefix.oreChunk.setAlternativeOreName(OrePrefix.ore.name());
+        GTMTOrePrefix.oreEnderChunk.setAlternativeOreName(OrePrefix.oreEndstone.name());
+        GTMTOrePrefix.oreNetherChunk.setAlternativeOreName(OrePrefix.oreNetherrack.name());
+        GTMTOrePrefix.oreSandyChunk.setAlternativeOreName(OrePrefix.ore.name());
     }
 }

@@ -15,6 +15,11 @@ item.gtPebble.black_granite.name=黒色花崗岩の小石
 item.gtPebble.marble.name=大理石の小石
 item.gtPebble.red_granite.name=赤色花崗岩の小石
 
+item.material.oreprefix.oreChunk=%s鉱石塊
+item.material.oreprefix.oreEnderChunk=エンド%s鉱石塊
+item.material.oreprefix.oreNetherChunk=ネザー%s鉱石塊
+item.material.oreprefix.oreSandyChunk=砂状%s鉱石塊
+
 # singleblock
 # Auto Chisel
 gtmt.machine.auto_chisel.lv.name=基本型自動彫刻機
