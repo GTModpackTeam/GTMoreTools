@@ -25,9 +25,13 @@ import com.github.gtexpert.gtmt.api.ModValues;
 import com.github.gtexpert.gtmt.api.modules.TModule;
 import com.github.gtexpert.gtmt.api.util.Mods;
 import com.github.gtexpert.gtmt.integration.IntegrationSubmodule;
+import com.github.gtexpert.gtmt.integration.exnihilo.items.ExNihiloItems;
 import com.github.gtexpert.gtmt.integration.exnihilo.recipes.ExNihiloToolRecipe;
+import com.github.gtexpert.gtmt.integration.exnihilo.recipes.SieveDrops;
 import com.github.gtexpert.gtmt.integration.exnihilo.tools.ExNihiloToolsItems;
 import com.github.gtexpert.gtmt.modules.Modules;
+
+import exnihilocreatio.registries.manager.ExNihiloRegistryManager;
 
 @TModule(
          moduleID = Modules.MODULE_EXNIHILO,
@@ -46,6 +50,8 @@ public class ExNihiloModule extends IntegrationSubmodule {
     @Override
     public void preInit(FMLPreInitializationEvent event) {
         ExNihiloToolsItems.init();
+        ExNihiloItems.init();
+        ExNihiloRegistryManager.registerSieveDefaultRecipeHandler(new SieveDrops());
     }
 
     @Override
@@ -57,12 +63,14 @@ public class ExNihiloModule extends IntegrationSubmodule {
         for (IGTTool tool : ExNihiloToolsItems.getAllTools()) {
             registry.register(tool.get());
         }
+        registry.register(ExNihiloItems.pebbleItem);
     }
 
     @SubscribeEvent
     @SideOnly(Side.CLIENT)
     public static void onRegisterModels(ModelRegistryEvent event) {
         ExNihiloToolsItems.registerModels();
+        // ItemGTMTPebbles.registerModels();
     }
 
     @SubscribeEvent

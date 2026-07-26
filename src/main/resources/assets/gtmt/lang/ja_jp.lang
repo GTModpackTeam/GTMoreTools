@@ -10,6 +10,11 @@ gt.tool.class.crook=鉤
 item.upgrade_storage.name=容量キット
 gtmt.item.upgrade_storage.name=容量キット (%s)
 
+item.gtPebble.basalt.name=玄武岩の小石
+item.gtPebble.black_granite.name=黒色花崗岩の小石
+item.gtPebble.marble.name=大理石の小石
+item.gtPebble.red_granite.name=赤色花崗岩の小石
+
 # singleblock
 # Auto Chisel
 gtmt.machine.auto_chisel.lv.name=基本型自動彫刻機

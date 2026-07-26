@@ -10,6 +10,11 @@ gt.tool.class.crook=Crook
 item.upgrade_storage.name=Storage Upgrade
 gtmt.item.upgrade_storage.name=Storage Upgrade (%s)
 
+item.gtPebble.basalt.name=Basalt Pebble
+item.gtPebble.black_granite.name=Black Granite Pebble
+item.gtPebble.marble.name=Marble Pebble
+item.gtPebble.red_granite.name=Red Granite Pebble
+
 # singleblock
 # Auto Chisel
 gtmt.machine.auto_chisel.lv.name=Basic Auto Chisel
