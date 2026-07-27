@@ -10,6 +10,7 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraftforge.client.event.ColorHandlerEvent;
 import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.event.RegistryEvent;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -27,7 +28,8 @@ import com.github.gtexpert.gtmt.api.util.Mods;
 import com.github.gtexpert.gtmt.integration.IntegrationSubmodule;
 import com.github.gtexpert.gtmt.integration.exnihilo.items.ExNihiloItems;
 import com.github.gtexpert.gtmt.integration.exnihilo.recipes.ExNihiloToolRecipe;
-import com.github.gtexpert.gtmt.integration.exnihilo.recipes.SieveDrops;
+import com.github.gtexpert.gtmt.integration.exnihilo.recipes.sieve.SieveDrops;
+import com.github.gtexpert.gtmt.integration.exnihilo.recipes.sieve.VeinProbabilityReporter;
 import com.github.gtexpert.gtmt.integration.exnihilo.tools.ExNihiloToolsItems;
 import com.github.gtexpert.gtmt.modules.Modules;
 
@@ -51,11 +53,20 @@ public class ExNihiloModule extends IntegrationSubmodule {
     public void preInit(FMLPreInitializationEvent event) {
         ExNihiloToolsItems.init();
         ExNihiloItems.init();
+    }
+
+    @Override
+    public void init(FMLInitializationEvent evet) {
+        SieveDrops.readSieveDropsFromConfig();
         ExNihiloRegistryManager.registerSieveDefaultRecipeHandler(new SieveDrops());
     }
 
     @Override
-    public void postInit(FMLPostInitializationEvent event) {}
+    public void postInit(FMLPostInitializationEvent event) {
+        if (ExNihiloConfigHolder.drops.outputVeinProbabilities) {
+            VeinProbabilityReporter.output();
+        }
+    }
 
     @SubscribeEvent
     public static void onRegisterItems(RegistryEvent.Register<Item> event) {

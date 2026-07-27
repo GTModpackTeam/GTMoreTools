@@ -12,7 +12,7 @@ import org.jetbrains.annotations.NotNull;
 
 import gregtech.api.items.toolitem.IGTTool;
 import gregtech.api.items.toolitem.ToolClasses;
-import gregtech.api.unification.material.event.PostMaterialEvent;
+import gregtech.api.unification.material.event.MaterialEvent;
 import gregtech.api.unification.ore.OrePrefix;
 import gregtech.common.items.MetaItems;
 
@@ -57,7 +57,7 @@ public class ExNihiloEventHandlers {
 
     // Material Event
     @SubscribeEvent
-    public static void postRegisterMaterials(@NotNull PostMaterialEvent event) {
+    public static void registerOrePrefix(@NotNull MaterialEvent event) {
         MetaItems.addOrePrefix(GTMTOrePrefix.oreChunk, GTMTOrePrefix.oreEnderChunk, GTMTOrePrefix.oreNetherChunk,
                 GTMTOrePrefix.oreSandyChunk);
         GTMTOrePrefix.oreChunk.setAlternativeOreName(OrePrefix.ore.name());
