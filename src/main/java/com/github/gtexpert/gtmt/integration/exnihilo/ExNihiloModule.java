@@ -20,6 +20,7 @@ import net.minecraftforge.registries.IForgeRegistry;
 
 import org.jetbrains.annotations.NotNull;
 
+import gregtech.api.gui.resources.SteamTexture;
 import gregtech.api.items.toolitem.IGTTool;
 
 import com.github.gtexpert.gtmt.api.ModValues;
@@ -27,7 +28,8 @@ import com.github.gtexpert.gtmt.api.modules.TModule;
 import com.github.gtexpert.gtmt.api.util.Mods;
 import com.github.gtexpert.gtmt.integration.IntegrationSubmodule;
 import com.github.gtexpert.gtmt.integration.exnihilo.items.ExNihiloItems;
-import com.github.gtexpert.gtmt.integration.exnihilo.recipes.ExNihiloToolRecipe;
+import com.github.gtexpert.gtmt.integration.exnihilo.metatileentities.ExNihiloMetaTileEntities;
+import com.github.gtexpert.gtmt.integration.exnihilo.recipes.*;
 import com.github.gtexpert.gtmt.integration.exnihilo.recipes.sieve.SieveDrops;
 import com.github.gtexpert.gtmt.integration.exnihilo.recipes.sieve.VeinProbabilityReporter;
 import com.github.gtexpert.gtmt.integration.exnihilo.tools.ExNihiloToolsItems;
@@ -43,6 +45,9 @@ import exnihilocreatio.registries.manager.ExNihiloRegistryManager;
          description = "Ex Nihilo Creatio Module")
 public class ExNihiloModule extends IntegrationSubmodule {
 
+    public static final SteamTexture PROGRESS_BAR_SIFTER_STEAM = SteamTexture
+            .fullImage("textures/gui/progress_bar/progress_bar_sift_%s.png");
+
     @NotNull
     @Override
     public List<Class<?>> getEventBusSubscribers() {
@@ -53,17 +58,17 @@ public class ExNihiloModule extends IntegrationSubmodule {
     public void preInit(FMLPreInitializationEvent event) {
         ExNihiloToolsItems.init();
         ExNihiloItems.init();
+        ExNihiloMetaTileEntities.init();
     }
 
     @Override
     public void init(FMLInitializationEvent evet) {
-        SieveDrops.readSieveDropsFromConfig();
         ExNihiloRegistryManager.registerSieveDefaultRecipeHandler(new SieveDrops());
     }
 
     @Override
     public void postInit(FMLPostInitializationEvent event) {
-        if (ExNihiloConfigHolder.drops.outputVeinProbabilities) {
+        if (ExNihiloConfigHolder.outputVeinProbabilities) {
             VeinProbabilityReporter.output();
         }
     }
@@ -81,7 +86,6 @@ public class ExNihiloModule extends IntegrationSubmodule {
     @SideOnly(Side.CLIENT)
     public static void onRegisterModels(ModelRegistryEvent event) {
         ExNihiloToolsItems.registerModels();
-        // ItemGTMTPebbles.registerModels();
     }
 
     @SubscribeEvent
@@ -94,11 +98,14 @@ public class ExNihiloModule extends IntegrationSubmodule {
     public void registerBlocks(RegistryEvent.Register<Block> event) {}
 
     @Override
-    public void registerRecipesNormal(RegistryEvent.Register<IRecipe> event) {}
+    public void registerRecipesNormal(RegistryEvent.Register<IRecipe> event) {
+        SieveDrops.readSieveDropsFromConfig();
+    }
 
     @Override
     public void registerRecipesLowest(RegistryEvent.Register<IRecipe> event) {
-        ExNihiloToolRecipe.registerRecipes();
         ExNihiloUtil.init();
+        ExNihiloToolRecipe.registerRecipes();
+        ExNihiloMiscRecipe.init();
     }
 }

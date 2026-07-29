@@ -39,8 +39,42 @@ gtmt.machine.auto_chisel.zpm.tooltip=あなたの理想、彫刻します/n左�
 gtmt.machine.auto_chisel.uv.name=究極型自動彫刻機
 gtmt.machine.auto_chisel.uv.tooltip=あなたの理想、彫刻します/n左が素材、右が彫刻型。詳しくはJEIのChiselingページをご覧ください。/n§d作者:§f @tier940
 
+# Auto Sieve
+gtmt.machine.sieve_steam.name=蒸気式ふるい
+gtmt.machine.sieve_steam.tooltip=一日中右クリックするのはもう疲れただろう?
+gtmt.machine.steam_sieve.steel.name=高圧蒸気式ふるい
+gtmt.machine.steam_sieve.steel.tooltip=一日中右クリックするのはもう疲れただろう?
+
+gtmt.machine.electric_sieve.lv.name=基本型電動ふるい
+gtmt.machine.electric_sieve.lv.tooltip=AFKシミュレータ
+gtmt.machine.electric_sieve.mv.name=発展型電動ふるい
+gtmt.machine.electric_sieve.mv.tooltip=AFKシミュレータ
+gtmt.machine.electric_sieve.hv.name=発展型電動ふるい II
+gtmt.machine.electric_sieve.hv.tooltip=AFKシミュレータ
+gtmt.machine.electric_sieve.ev.name=発展型電動ふるい III
+gtmt.machine.electric_sieve.ev.tooltip=AFKシミュレータ
+gtmt.machine.electric_sieve.iv.name=精鋭型電動ふるい
+gtmt.machine.electric_sieve.iv.tooltip=粒子振動チャンバー
+gtmt.machine.electric_sieve.luv.name=精鋭型電動ふるい II
+gtmt.machine.electric_sieve.luv.tooltip=粒子振動チャンバー
+gtmt.machine.electric_sieve.zpm.name=精鋭型電動ふるい III
+gtmt.machine.electric_sieve.zpm.tooltip=粒子振動チャンバー
+gtmt.machine.electric_sieve.uv.name=究極型電動ふるい
+gtmt.machine.electric_sieve.uv.tooltip=無から有を
+gtmt.machine.electric_sieve.uhv.name=史上最高の電動ふるい
+gtmt.machine.electric_sieve.uhv.tooltip=無から有を
+gtmt.machine.electric_sieve.uev.name=史上最高の電動ふるい II
+gtmt.machine.electric_sieve.uev.tooltip=無から有を
+gtmt.machine.electric_sieve.uiv.name=史上最高の電動ふるい III
+gtmt.machine.electric_sieve.uiv.tooltip=無から有を
+gtmt.machine.electric_sieve.uxv.name=史上最高の電動ふるい IV
+gtmt.machine.electric_sieve.uxv.tooltip=無から有を
+gtmt.machine.electric_sieve.opv.name=伝説の電動ふるい
+gtmt.machine.electric_sieve.opv.tooltip=無から有を
+
 # recipemaps
 recipemap.auto_chisel.name=自動彫刻機
+recipemap.auto_sieve.name=自動ふるい
 
 # Tinkers' Construct連携 — カスタムトレイト
 modifier.gtmt_heat_resistant.name=耐熱性

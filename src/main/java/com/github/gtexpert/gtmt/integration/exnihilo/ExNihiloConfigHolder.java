@@ -17,16 +17,25 @@ public class ExNihiloConfigHolder {
 
     @Config.Comment({ "Replaces the original Crooks with GT Crooks or recipe.", "Affected: Wood, Iron, Gold, Diamond.",
             "Default: false" })
+    @Config.RequiresMcRestart
     public static boolean replaceCrook = false;
 
-    public static class SieveCategory {
+    @Config.Comment({
+            "Outputs GTCEu vein and material probability information to the log.",
+            "This option is intended to help configure generated sieve drops.",
+            "Default: false"
+    })
+    @Config.RequiresMcRestart
+    public static boolean outputVeinProbabilities = false;
 
-        @Config.Comment({
-                "Outputs GTCEu vein and material probability information to the log.",
-                "This option is intended to help configure generated sieve drops.",
-                "Default: false"
-        })
-        public boolean outputVeinProbabilities = false;
+    @Config.Comment({
+            "Replace Ex Nihilo Mesh recipes with GT-style recipes",
+            "Default: true"
+    })
+    @Config.RequiresMcRestart
+    public static boolean harderMeshes = true;
+
+    public static class SieveCategory {
 
         @Config.Comment({ "Sand Sieve drop list.", "Format: modid:materialName@Chance*MeshLevel",
                 "If no \"modid:\" is specified, \"gregtech:\" is assumed.",

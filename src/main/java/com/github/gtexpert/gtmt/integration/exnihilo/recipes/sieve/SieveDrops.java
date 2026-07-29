@@ -23,6 +23,7 @@ import gregtech.common.blocks.MetaBlocks;
 import com.github.gtexpert.gtmt.api.unification.material.ore.GTMTOrePrefix;
 import com.github.gtexpert.gtmt.api.util.ModLog;
 import com.github.gtexpert.gtmt.integration.exnihilo.ExNihiloConfigHolder;
+import com.github.gtexpert.gtmt.integration.exnihilo.recipes.ExNihiloSieveRecipe;
 
 import exnihilocreatio.ModBlocks;
 import exnihilocreatio.blocks.BlockSieve;
@@ -155,6 +156,7 @@ public class SieveDrops implements ISieveDefaultRegistryProvider {
             }
         }
         SIEVE_DROPS_MAP = null;
+        ExNihiloSieveRecipe.register(registry);
     }
 
     enum SieveDropType implements IStringSerializable {

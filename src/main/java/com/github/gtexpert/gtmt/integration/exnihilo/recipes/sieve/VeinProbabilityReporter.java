@@ -8,6 +8,7 @@ import java.util.Map;
 import gregtech.api.unification.material.Material;
 import gregtech.api.worldgen.config.OreDepositDefinition;
 import gregtech.api.worldgen.config.WorldGenRegistry;
+import gregtech.common.ConfigHolder;
 
 import com.github.gtexpert.gtmt.api.util.ModLog;
 
@@ -40,6 +41,11 @@ public final class VeinProbabilityReporter {
         definitions.sort(
                 Comparator.comparing(definition -> VeinPathUtils.normalize(
                         definition.getDepositName())));
+
+        int min = ConfigHolder.worldgen.minVeinsInSection;
+        int add = ConfigHolder.worldgen.additionalVeinsInSection;
+        int ave = min + add / 2;
+        boolean overflowed = false;
 
         ModLog.logger.info("========== GTCEu Vein Probability Report ==========");
 
@@ -89,12 +95,17 @@ public final class VeinProbabilityReporter {
 
             for (Map.Entry<Material, Double> material : materialRatios.entrySet()) {
 
-                double finalChance = veinChance * material.getValue();
+                double finalChance = veinChance * material.getValue() * ave;
+                if (finalChance > 1) {
+                    finalChance = 1;
+                    overflowed = true;
+                }
 
                 ModLog.logger.info(
-                        "  Material: {} | chance: {}",
+                        "  Material: {} | Suggested Sieve Chance: {}{}",
                         material.getKey().getRegistryName(),
-                        formatPercent(finalChance));
+                        formatPercent(finalChance),
+                        overflowed ? " (Overflow)" : "");
             }
         }
 
