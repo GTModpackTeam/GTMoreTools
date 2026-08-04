@@ -98,10 +98,10 @@ public class ItemGTMTPebbles extends Item implements IHasModel {
 
     public enum GTPebbles implements IStringSerializable {
 
-        BASALT("basalt"),
         BLACK_GRANITE("black_granite"),
+        RED_GRANITE("red_granite"),
         MARBLE("marble"),
-        RED_GRANITE("red_granite");
+        BASALT("basalt");
 
         private final String name;
         public static final GTPebbles[] VALUES = values();
