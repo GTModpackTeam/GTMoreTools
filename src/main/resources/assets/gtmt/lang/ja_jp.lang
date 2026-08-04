@@ -42,8 +42,8 @@ gtmt.machine.auto_chisel.uv.tooltip=あなたの理想、彫刻します/n左が
 # Auto Sieve
 gtmt.machine.sieve_steam.name=蒸気式ふるい
 gtmt.machine.sieve_steam.tooltip=一日中右クリックするのはもう疲れただろう?
-gtmt.machine.steam_sieve.steel.name=高圧蒸気式ふるい
-gtmt.machine.steam_sieve.steel.tooltip=一日中右クリックするのはもう疲れただろう?
+gtmt.machine.sieve_steam.steel.name=高圧蒸気式ふるい
+gtmt.machine.sieve_steam.steel.tooltip=一日中右クリックするのはもう疲れただろう?
 
 gtmt.machine.electric_sieve.lv.name=基本型電動ふるい
 gtmt.machine.electric_sieve.lv.tooltip=AFKシミュレータ
