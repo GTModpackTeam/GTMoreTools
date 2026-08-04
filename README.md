@@ -32,6 +32,13 @@ For full details, see [CHANGELOG.md](CHANGELOG.md).
 ### Storage Drawers Integration
 - Add GT material-based Storage Upgrades.
 
+### Ex Nihilo: Creatio Integration
+- Add GT material-based Crook.
+- Hammering Compatibility
+- Sieving Compatibility
+
+For full details, see [CHANGELOG.md](CHANGELOG.md).
+
 ## For Addon Developers
 
 GTMoreTools exposes a public API for extending the Tinkers' Construct integration.
@@ -40,3 +47,5 @@ See **[DEVELOPER.md](DEVELOPER.md)** for the full guide.
 ## Credits
 
 - I modified some textures & codes from [GregTech CE: Unofficial](https://www.curseforge.com/minecraft/mc-mods/gregtech-ce-unofficial) under [LGPL-3.0](https://github.com/GregTechCEu/GregTech/blob/main/LICENSE) License
+- I modified some texture & codes from [Gregification](https://github.com/GregTechCEu/Gregification) under [MIT](LICENSE-Gregification) Licence
+- I modified some textures from [Ex Nihilo: Creatio](https://github.com/BloodyMods/ExNihiloCreatio) under [MIT](LICENSE-ExNihiloCreatio) License

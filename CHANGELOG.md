@@ -1,3 +1,17 @@
+# v1.5.0
+## Ex Nihiro: Creatio Integration
+- _Crooking Compatibility_
+  - Added GT-style crooks.
+- _Hammering Compatibility_
+  - CEu Hard hammers can now be used as Ex Nihilo hammers.
+- _Sieving Compatibility_
+  - :warning:**_WARNING_**:warning: This feature is temporary and will be removed once GTCEu supports it natively.
+  - Added Steam and Electric Sieve.
+  - Added Basalt, Granites, Marble pebble.
+  - Added GT-material Ore Chunk.
+
+* * *
+
 # v1.4.0
 ## New: Tools Module
 - Per-item tool restrictions (custom max durability), JEI hiding, and recipe removal — all configurable via a single cfg.
