@@ -305,5 +305,9 @@ public class ExNihiloConfigHolder {
                 "pitchblende@0.0987*4",
                 "uraninite@0.0347*4"
         };
+
+        @Config.Comment({ "Enables logging of SieveDrop registration information.", "See 'latest.log'",
+                "Default: false" })
+        public boolean outputsDebugs = false;
     }
 }

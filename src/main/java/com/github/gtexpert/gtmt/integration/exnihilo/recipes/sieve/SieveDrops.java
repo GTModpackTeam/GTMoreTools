@@ -54,6 +54,7 @@ public class SieveDrops implements ISieveDefaultRegistryProvider {
     }
 
     private static void readSieveDropsFromConfig(String[] recipes, SieveDropType type) {
+        ModLog.logger.info("Reading SieveDrops from config...");
         if (recipes == null || recipes.length == 0) {
             ModLog.logger.info("No configurations found for {} sieve category, skipping...", type.getName());
             return;
@@ -66,6 +67,7 @@ public class SieveDrops implements ISieveDefaultRegistryProvider {
                 SIEVE_DROPS_MAP.get(type).add(drop);
             }
         }
+        ModLog.logger.info("Complete.");
     }
 
     private static SieveDrop validateInputs(String recipe) {
@@ -80,8 +82,8 @@ public class SieveDrops implements ISieveDefaultRegistryProvider {
         int starIndex = trimmed.lastIndexOf('*');
 
         if (atIndex <= 0 || starIndex <= atIndex + 1 || starIndex >= trimmed.length() - 1) {
-            throw new IllegalArgumentException(
-                    "Expected format [modid:]material@chance*mesh_level: " + recipe);
+            ModLog.logger.error("Expected format [modid:]material@chance*mesh_level: " + recipe);
+            return drop;
         }
 
         String materialText = trimmed.substring(0, atIndex).trim();
@@ -123,8 +125,11 @@ public class SieveDrops implements ISieveDefaultRegistryProvider {
             return drop;
         }
 
-        ModLog.logger.info("Register SieveDropEntry: Material={}, Chance={}, MeshLevel={}", material.getRegistryName(),
-                chance, meshLevel);
+        if (ExNihiloConfigHolder.drops.outputsDebugs) {
+            ModLog.logger.info("Register SieveDropEntry: Material={}, Chance={}, MeshLevel={}",
+                    material.getRegistryName(),
+                    chance, meshLevel);
+        }
         drop = new SieveDrop(material, chance, meshLevel);
         return drop;
     }
