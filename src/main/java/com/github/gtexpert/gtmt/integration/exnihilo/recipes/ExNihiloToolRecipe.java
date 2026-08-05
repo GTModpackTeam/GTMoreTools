@@ -22,15 +22,14 @@ public class ExNihiloToolRecipe {
 
             crooks(material);
         }
-
         if (ExNihiloConfigHolder.replaceCrook) {
             replaceCrooks();
         }
     }
 
     public static void crooks(Material material) {
-        if (!ExNihiloConfigHolder.replaceCrook &&
-                (material == Materials.Iron || material == Materials.Gold || material == Materials.Diamond)) {
+        if (material == Materials.Iron || material == Materials.Gold || material == Materials.Diamond ||
+                material == Materials.Wood) {
             return;
         }
 
@@ -48,28 +47,24 @@ public class ExNihiloToolRecipe {
     }
 
     public static void replaceCrooks() {
-        // replace recipes
-        // Gold
+        // remove
         ModHandler.removeRecipeByOutput(Mods.ExNihilo.getItem("crook_gold"));
-        ModHandler.addShapedRecipe("crook_gold", Mods.ExNihilo.getItem("crook_gold"),
+        ModHandler.removeRecipeByOutput(Mods.ExNihilo.getItem("crook_wood"));
+        ModHandler.removeRecipeByOutput(Mods.ExNihilo.getItem("crook_iron"));
+        ModHandler.removeRecipeByOutput(Mods.ExNihilo.getItem("crook_diamond"));
+
+        // add
+        ModHandler.addShapedRecipe("crook_gold_replaced", Mods.ExNihilo.getItem("crook_gold"),
                 "RR", " R", " R",
                 'R', new UnificationEntry(OrePrefix.stick, Materials.Gold));
-
-        // replace crooks
-        // Wood, Iron, Diamond
-        ModHandler.removeRecipeByOutput(Mods.ExNihilo.getItem("crook_wood"));
-        ModHandler.addShapedRecipe("crook_wood",
+        ModHandler.addShapedRecipe("crook_wood_replaced",
                 ToolHelper.getAndSetToolData(ExNihiloToolsItems.CROOK, Materials.Wood, 47, 1, 4F, 1F),
                 "RR", " R", " R",
                 'R', new UnificationEntry(OrePrefix.stick, Materials.Wood));
-
-        ModHandler.removeRecipeByOutput(Mods.ExNihilo.getItem("crook_iron"));
-        ModHandler.addShapedRecipe("crook_diamond", ExNihiloToolsItems.CROOK.get(Materials.Iron),
+        ModHandler.addShapedRecipe("crook_iron_replaced", ExNihiloToolsItems.CROOK.get(Materials.Iron),
                 "RR", " R", " R",
                 'R', new UnificationEntry(OrePrefix.stick, Materials.Iron));
-
-        ModHandler.removeRecipeByOutput(Mods.ExNihilo.getItem("crook_diamond"));
-        ModHandler.addShapedRecipe("crook_diamond", ExNihiloToolsItems.CROOK.get(Materials.Diamond),
+        ModHandler.addShapedRecipe("crook_diamond_replaced", ExNihiloToolsItems.CROOK.get(Materials.Diamond),
                 "RR", " R", " R",
                 'R', new UnificationEntry(OrePrefix.stick, Materials.Diamond));
     }

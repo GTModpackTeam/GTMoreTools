@@ -45,7 +45,6 @@ public final class VeinProbabilityReporter {
         int min = ConfigHolder.worldgen.minVeinsInSection;
         int add = ConfigHolder.worldgen.additionalVeinsInSection;
         int ave = min + add / 2;
-        boolean overflowed = false;
 
         ModLog.logger.info("========== GTCEu Vein Probability Report ==========");
 
@@ -96,16 +95,12 @@ public final class VeinProbabilityReporter {
             for (Map.Entry<Material, Double> material : materialRatios.entrySet()) {
 
                 double finalChance = veinChance * material.getValue() * ave;
-                if (finalChance > 1) {
-                    finalChance = 1;
-                    overflowed = true;
-                }
 
                 ModLog.logger.info(
                         "  Material: {} | Suggested Sieve Chance: {}{}",
                         material.getKey().getRegistryName(),
                         formatPercent(finalChance),
-                        overflowed ? " (Overflow)" : "");
+                        finalChance > 1 ? " (Overflow)" : "");
             }
         }
 
@@ -116,6 +111,6 @@ public final class VeinProbabilityReporter {
         return String.format(
                 java.util.Locale.ROOT,
                 "%.4f",
-                probability);
+                probability > 1 ? 1 : probability);
     }
 }

@@ -33,13 +33,15 @@ public class ExNihiloSieveRecipe {
                                 NBTCondition.ANY);
                 for (Siftable siftable : registry.getDrops(stack)) {
                     if (siftable.getDrop() == null) continue;
-                    if (siftable.getMeshLevel() == recipe.getMesh().getMetadata())
-                        if ((int) (siftable.getChance() * 10000) >= 10000) {
+                    if (siftable.getChance() <= 0) continue;
+                    if (siftable.getMeshLevel() == recipe.getMesh().getMetadata()) {
+                        if ((int) siftable.getChance() * 10000 >= 10000) {
                             builder.outputs(siftable.getDrop().getItemStack());
                         } else {
                             builder.chancedOutput(siftable.getDrop().getItemStack(),
                                     (int) (siftable.getChance() * 10000), 500);
                         }
+                    }
                 }
                 builder.buildAndRegister();
             }

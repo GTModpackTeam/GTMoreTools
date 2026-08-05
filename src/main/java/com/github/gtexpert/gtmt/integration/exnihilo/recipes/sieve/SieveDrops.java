@@ -54,7 +54,7 @@ public class SieveDrops implements ISieveDefaultRegistryProvider {
     }
 
     private static void readSieveDropsFromConfig(String[] recipes, SieveDropType type) {
-        ModLog.logger.info("Reading SieveDrops from config...");
+        ModLog.logger.info("Reading {} SieveDrops from config...", type);
         if (recipes == null || recipes.length == 0) {
             ModLog.logger.info("No configurations found for {} sieve category, skipping...", type.getName());
             return;
@@ -160,31 +160,26 @@ public class SieveDrops implements ISieveDefaultRegistryProvider {
                 }
             }
         }
-        SIEVE_DROPS_MAP = null;
+        SIEVE_DROPS_MAP.clear();
         ExNihiloSieveRecipe.register(registry);
     }
 
     enum SieveDropType implements IStringSerializable {
 
-        SAND("sand", GTMTOrePrefix.oreSandyChunk, null),
-        GRAVEL("gravel", GTMTOrePrefix.oreChunk, null),
-        GRANITE("crushedGranite", GTMTOrePrefix.oreChunk, null),
-        DIORITE("crushedDiorite", GTMTOrePrefix.oreChunk, null),
-        ANDESITE("crushedAndesite", GTMTOrePrefix.oreChunk, null),
-
-        NETHERRACK("nether", GTMTOrePrefix.oreNetherChunk,
-                new ItemStack(ModBlocks.netherrackCrushed)),
-        END("end", GTMTOrePrefix.oreEnderChunk,
-                new ItemStack(ModBlocks.endstoneCrushed));
+        SAND("sand", GTMTOrePrefix.oreSandyChunk),
+        GRAVEL("gravel", GTMTOrePrefix.oreChunk),
+        GRANITE("crushedGranite", GTMTOrePrefix.oreChunk),
+        DIORITE("crushedDiorite", GTMTOrePrefix.oreChunk),
+        ANDESITE("crushedAndesite", GTMTOrePrefix.oreChunk),
+        NETHERRACK("nether", GTMTOrePrefix.oreNetherChunk),
+        END("end", GTMTOrePrefix.oreEnderChunk);
 
         private final String registryName;
         private final OrePrefix outputPrefix;
-        private final ItemStack explicitInput;
 
-        SieveDropType(String registryName, OrePrefix outputPrefix, ItemStack explicitInput) {
+        SieveDropType(String registryName, OrePrefix outputPrefix) {
             this.registryName = registryName;
             this.outputPrefix = outputPrefix;
-            this.explicitInput = explicitInput;
         }
 
         @Override
@@ -195,14 +190,6 @@ public class SieveDrops implements ISieveDefaultRegistryProvider {
 
         public OrePrefix getOutputPrefix() {
             return outputPrefix;
-        }
-
-        public boolean hasExplicitInput() {
-            return explicitInput != null;
-        }
-
-        public ItemStack getExplicitInput() {
-            return explicitInput == null ? ItemStack.EMPTY : explicitInput.copy();
         }
     }
 
