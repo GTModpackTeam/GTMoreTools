@@ -74,7 +74,7 @@ gtmt.machine.electric_sieve.opv.tooltip=From nothing, something
 
 # recipemaps
 recipemap.auto_chisel.name=Auto Chisel
-recipemap.auto_sieve.name=Auto Sieve
+recipemap.electric_sieve.name=Auto Sieve
 
 # Tinkers' Construct integration — custom traits
 modifier.gtmt_heat_resistant.name=Heat Resistant

@@ -74,7 +74,7 @@ gtmt.machine.electric_sieve.opv.tooltip=無から有を
 
 # recipemaps
 recipemap.auto_chisel.name=自動彫刻機
-recipemap.auto_sieve.name=自動ふるい
+recipemap.electric_sieve.name=自動ふるい
 
 # Tinkers' Construct連携 — カスタムトレイト
 modifier.gtmt_heat_resistant.name=耐熱性

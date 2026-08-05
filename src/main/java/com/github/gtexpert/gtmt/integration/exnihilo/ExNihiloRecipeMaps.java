@@ -11,7 +11,7 @@ import com.github.gtexpert.gtmt.integration.exnihilo.metatileentities.SieveRecip
 
 public class ExNihiloRecipeMaps {
 
-    public static final RecipeMap<SimpleRecipeBuilder> SIEVE_RECIPES = new SieveRecipeMap("auto_sieve", 2, 42, 0, 0,
+    public static final RecipeMap<SimpleRecipeBuilder> SIEVE_RECIPES = new SieveRecipeMap("electric_sieve", 2, 42, 0, 0,
             new SimpleRecipeBuilder().duration(100).EUt(16), false)
                     .setProgressBar(GuiTextures.PROGRESS_BAR_SIFT, ProgressWidget.MoveType.VERTICAL_DOWNWARDS)
                     .setSound(SoundEvents.BLOCK_SAND_PLACE);
