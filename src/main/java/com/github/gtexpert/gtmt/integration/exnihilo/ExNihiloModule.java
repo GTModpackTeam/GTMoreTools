@@ -40,7 +40,7 @@ import exnihilocreatio.registries.manager.ExNihiloRegistryManager;
 @TModule(
          moduleID = Modules.MODULE_EXNIHILO,
          containerID = ModValues.MODID,
-         modDependencies = Mods.Names.EX_NIHOLO,
+         modDependencies = Mods.Names.EX_NIHILO,
          name = "GTMoreTools Ex Nihilo Creatio Integration",
          description = "Ex Nihilo Creatio Module")
 public class ExNihiloModule extends IntegrationSubmodule {
