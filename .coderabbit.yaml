@@ -1,0 +1,47 @@
+knowledge_base:
+  mcp:
+    # "auto" disables MCP for public repositories, so set it explicitly.
+    # This is what allows the DeepWiki MCP server to be used as review context.
+    usage: enabled
+
+reviews:
+  path_instructions:
+    - path: "src/main/java/**/*.java"
+      instructions: |
+        Minecraft 1.12.2 Forge mod (GTMoreTools / GTMT), an add-on for
+        GregTech CE: Unofficial (GTCEu, https://github.com/GregTechCEu/GregTech).
+
+        GTCEu context — use DeepWiki (GregTechCEu/GregTech) to verify:
+        - Confirm GTCEu APIs, registries and MetaTileEntity-related classes are used
+          correctly, and that referenced methods/fields actually exist in the pinned
+          GTCEu version.
+        - Flag use of GTCEu internals that are not part of its public API when a public
+          equivalent exists.
+
+        Platform constraints (1.12.2 / Java 8 bytecode):
+        - Do NOT suggest Java APIs or language features unavailable on this platform
+          (e.g. `List.of`, records, switch expressions, text blocks).
+        - Do NOT suggest modern Minecraft/Forge APIs; this is the 1.12.2 Forge line.
+
+        Side boundary:
+        - Flag client-only types or `@SideOnly(Side.CLIENT)` members referenced from
+          common/server code paths — this crashes a dedicated server.
+
+        Module discovery:
+        - Modules are discovered via Forge's `ASMDataTable`
+          (`modules/ModuleManager.java`) — not bytecode rewriting.
+        - `core/CoreMod.java` implements `IFMLLoadingPlugin`, but its
+          `getASMTransformerClass()` returns an empty array — it is used only for
+          early config-file setup (`injectData`), not for ASM bytecode transformation.
+          Do not assume bytecode rewriting happens here; flag it as suspicious if a
+          change adds an actual transformer class to that array without a clear reason.
+
+        Mixins (`mixins.gtmt.*.json`):
+        - Verify the target class, method signature and descriptor plausibly exist in
+          the targeted mod (betterbuilderswands, chisel, storagedrawers, tconstruct).
+        - Injection points must be specific enough not to break on minor upstream changes.
+        - Any new mixin must be registered in the matching `mixins.gtmt.*.json`.
+
+        Build:
+        - `build.gradle` is auto-generated. Never edit it
+          (configure via `buildscript.properties` / `dependencies.gradle`).
