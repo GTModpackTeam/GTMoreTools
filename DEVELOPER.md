@@ -9,6 +9,7 @@ The table below shows current coverage:
 | Better Builder's Wands | —                                | No API yet                    |
 | Chisel                 | —                                | No API yet                    |
 | Storage Drawers        | `integration.storagedrawers.api` | Available, but for mixin only |
+| Ex Nihilo: Creatio     | -                                | No API yet                    |
 
 All registration calls must happen during your mod's `preInit` phase,
 **before** GTMT's `registerBlocks`, unless stated otherwise.
@@ -231,3 +232,47 @@ P X P
 - **X** = If _tier_ is -1, a `stickLong`; otherwise, a `Field Generator` of the specified tier
 
 - _Storage Upgrade_ conversion recipes between StorageDrawers and GTMoreTools are always added for Obsidian / Iron / Gold / Diamond / Emerald.
+
+---
+
+## Ex Nihilo: Creatio Integration
+
+No addon API is currently available. The following describes the internal logic for reference.
+
+### What is added
+
+1. **GT-style Crooks** — registered for every GT material with the `TOOL` property.
+2. **Hammer Conversion** - CEu Hard hammers can now be used as Ex Nihilo hammers.
+3. **Sieve Compatibility** — added Steam and Electric Sieves, GT pebbles and GT Ore chunk.
+
+### Tool crafting
+
+| Config | Recipe shape         | Materials    |
+|--------|----------------------|--------------|
+| Always | `"SS" / " S" / " S"` | Rod (or Gem) |
+
+The original Wood, Iron, Gold, Diamond Crook recipe is removed when `replaceCrook = true`.
+Registered as `toolCrook`.
+
+### Electric Sieve Recipe
+
+```
+C P C
+V H V
+W S W
+```
+
+- **C** = Circuit (all tier-scaled), **P** = Piston
+- **V** = Conveyer, **H** = Hull, **W** = `cableGTSingle` (LV = Tin, MV = Copper, ...)
+- **S** = Sieve
+
+### Sieving Compatibility
+
+:warning:**_WARNING_**:warning: This feature is temporary and will be removed once GTCEu supports it natively.
+- Adds GT stone Pebbles and Rubber Saplings to the Dirt Sieve drop table. 
+- Allows GT Materials to be added to the Sieve drop tables for Sand, Gravel, Andesite, Granite, Diorite, Netherrack, and Endstone via the config.
+  - Format: `modid:materialName@chance*meshLevel` (`modid` is optional and defaults to `gregtech`.)
+  - When `outputVeinProbabilities` is set to `true`, all worldgen vein definitions under `config/gregtech/worldgen/vein/` are scanned, and the generation probability of each ore is written to the log.
+> **Note:** GTMT only adds new entries and does not modify the default Sieve drop tables.
+
+---

@@ -93,6 +93,7 @@ jobs:
             chisel(recommended)
             better-builders-wands(recommended)
             tinkers-antique(recommended)
+            ex-nihilo-creatio(recommended)
           files: |
             build/libs/!(*-@(dev|sources|javadoc)).jar
             build/libs/*-@(sources).jar

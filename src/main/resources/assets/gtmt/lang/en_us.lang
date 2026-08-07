@@ -4,8 +4,21 @@ gt.tool.class.chisel=Chisel
 item.gt.tool.wand.name=%s Wand
 gt.tool.class.wand=Wand
 
+item.gt.tool.crook.name=%s Crook
+gt.tool.class.crook=Crook
+
 item.upgrade_storage.name=Storage Upgrade
 gtmt.item.upgrade_storage.name=Storage Upgrade (%s)
+
+item.gtPebble.basalt.name=Basalt Pebble
+item.gtPebble.black_granite.name=Black Granite Pebble
+item.gtPebble.marble.name=Marble Pebble
+item.gtPebble.red_granite.name=Red Granite Pebble
+
+item.material.oreprefix.oreChunk=%s Ore Chunk
+item.material.oreprefix.oreEnderChunk=Ender %s Ore Chunk
+item.material.oreprefix.oreNetherChunk=Nether %s Ore Chunk
+item.material.oreprefix.oreSandyChunk=Sandy %s Ore Chunk
 
 # singleblock
 # Auto Chisel
@@ -26,8 +39,42 @@ gtmt.machine.auto_chisel.zpm.tooltip=Your ideal, we will sculpt it./nMaterial in
 gtmt.machine.auto_chisel.uv.name=Ultimate Auto Chisel
 gtmt.machine.auto_chisel.uv.tooltip=Your ideal, we will sculpt it/nMaterial in the left, chiseling to the right. See JEI's Chiseling page for details./n§dAuthor:§f @tier940
 
+# Auto Sieve
+gtmt.machine.sieve_steam.name=Steam Sieve
+gtmt.machine.sieve_steam.tooltip=Tired of Right-Clicking all day?
+gtmt.machine.sieve_steam.steel.name=High Pressure Steam Sieve
+gtmt.machine.sieve_steam.steel.tooltip=Tired of Right-Clicking all day?
+
+gtmt.machine.electric_sieve.lv.name=Basic Electric Sieve
+gtmt.machine.electric_sieve.lv.tooltip=AFK Simulator
+gtmt.machine.electric_sieve.mv.name=Advanced Electric Sieve
+gtmt.machine.electric_sieve.mv.tooltip=AFK Simulator
+gtmt.machine.electric_sieve.hv.name=Advanced Electric Sieve II
+gtmt.machine.electric_sieve.hv.tooltip=AFK Simulator
+gtmt.machine.electric_sieve.ev.name=Advanced Electric Sieve III
+gtmt.machine.electric_sieve.ev.tooltip=AFK Simulator
+gtmt.machine.electric_sieve.iv.name=Elite Electric Sieve
+gtmt.machine.electric_sieve.iv.tooltip=Particle Vibration Chamber
+gtmt.machine.electric_sieve.luv.name=Elite Electric Sieve II
+gtmt.machine.electric_sieve.luv.tooltip=Particle Vibration Chamber
+gtmt.machine.electric_sieve.zpm.name=Elite Electric Sieve III
+gtmt.machine.electric_sieve.zpm.tooltip=Particle Vibration Chamber
+gtmt.machine.electric_sieve.uv.name=Ultimate Electric Sieve
+gtmt.machine.electric_sieve.uv.tooltip=From nothing, something
+gtmt.machine.electric_sieve.uhv.name=Epic Electric Sieve
+gtmt.machine.electric_sieve.uhv.tooltip=From nothing, something
+gtmt.machine.electric_sieve.uev.name=Epic Electric Sieve II
+gtmt.machine.electric_sieve.uev.tooltip=From nothing, something
+gtmt.machine.electric_sieve.uiv.name=Epic Electric Sieve III
+gtmt.machine.electric_sieve.uiv.tooltip=From nothing, something
+gtmt.machine.electric_sieve.uxv.name=Epic Electric Sieve IV
+gtmt.machine.electric_sieve.uxv.tooltip=From nothing, something
+gtmt.machine.electric_sieve.opv.name=Legendary Electric Sieve
+gtmt.machine.electric_sieve.opv.tooltip=From nothing, something
+
 # recipemaps
 recipemap.auto_chisel.name=Auto Chisel
+recipemap.electric_sieve.name=Auto Sieve
 
 # Tinkers' Construct integration — custom traits
 modifier.gtmt_heat_resistant.name=Heat Resistant

@@ -43,6 +43,7 @@ public enum Mods {
     EnderIOMachines(Names.ENDER_MACHINES),
     EnderIOConduits(Names.ENDER_CONDUITS),
     EnderIOAE2Conduits(Names.ENDER_AE2_CONDUITS),
+    ExNihilo(Names.EX_NIHILO),
     ExtraCPUs(Names.EXTRA_CPUS),
     GalacticraftCore(Names.GALACTICRAFT_CORE),
     GregicalityMultiblocks(Names.GREGICALITY_MULTIBLOCKS),
@@ -116,6 +117,7 @@ public enum Mods {
         public static final String ENDER_MACHINES = "enderiomachines";
         public static final String ENDER_CONDUITS = "enderioconduits";
         public static final String ENDER_AE2_CONDUITS = "enderioconduitsappliedenergistics";
+        public static final String EX_NIHILO = "exnihilocreatio";
         public static final String EXTRA_BEES = "extrabees";
         public static final String EXTRA_CPUS = "extracpus";
         public static final String EXTRA_TREES = "extratrees";
