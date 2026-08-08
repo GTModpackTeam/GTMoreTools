@@ -40,7 +40,6 @@ public class CoreModule implements IModule {
     @Override
     public void preInit(FMLPreInitializationEvent event) {
         proxy.preInit(event);
-
         logger.info("Hello World!");
     }
 }

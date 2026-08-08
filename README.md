@@ -26,16 +26,17 @@ This mod is an add-on for GregTech CEu that provides integration with various mo
 - Molten fluid and smeltery casting/melting support for CEu materials
 - Dual-tool mining with GT tool + TiC tool cross-hand combinations
 
-For full details, see [CHANGELOG.md](CHANGELOG.md).
-
+### Tools Module
+- Per-item tool restrictions (custom max durability), JEI hiding, and recipe removal, all configurable via a single cfg
 
 ### Storage Drawers Integration
-- Add GT material-based Storage Upgrades.
+- Adds GT material-based Storage Upgrades
 
 ### Ex Nihilo: Creatio Integration
-- Add GT material-based Crook.
-- Hammering Compatibility
-- Sieving Compatibility
+- Adds GT material-based Crooks
+- Hammering Compatibility: CEu hard hammers can be used as Ex Nihilo hammers
+- Sieving Compatibility: adds Steam and Electric Sieve, Basalt/Granite/Marble pebbles, and GT-material Ore Chunks
+  - :warning: This feature is temporary and will be removed once GTCEu supports sieving natively.
 
 For full details, see [CHANGELOG.md](CHANGELOG.md).
 
